@@ -8,6 +8,20 @@ Mod kurulumu, modpack yönetimi, çoklu profil, Microsoft hesabı ve otomatik Ja
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11%20x64-0078D6)
 
+## Ekran görüntüleri
+
+| Ana Sayfa | Mod Merkezi |
+|---|---|
+| ![Ana Sayfa](docs/screenshots/01-ana-ekran.png) | ![Mod Merkezi](docs/screenshots/02-mod-merkezi.png) |
+
+| Modpack Keşfi | Shaderpack Merkezi |
+|---|---|
+| ![Modpack Keşfi](docs/screenshots/03-modpack.png) | ![Shaderpack Merkezi](docs/screenshots/04-shaderpack.png) |
+
+### Ayarlar, Temalar & Özelleştirme
+
+![Ayarlar ve Temalar](docs/screenshots/05-ayarlar.png)
+
 ---
 
 ## Özellikler
