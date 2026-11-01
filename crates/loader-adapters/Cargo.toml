@@ -1,0 +1,18 @@
+[package]
+name = "loader-adapters"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+launcher-core = { path = "../launcher-core" }
+minecraft-metadata = { path = "../minecraft-metadata" }
+reqwest = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+zip = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true }
+

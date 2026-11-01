@@ -1,0 +1,34 @@
+# ── Rust derleme çıktıları ─────────────────────────────
+/target/
+**/target/
+# yerel cache konumu (opsiyonel; .cargo/config.toml.example dosyasına bak)
+.cargo/config.toml
+
+# ── Node / Vite ────────────────────────────────────────
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# ── Tauri (üretilen dosyalar) ──────────────────────────
+apps/desktop/src-tauri/gen/schemas/
+
+# ── Derlenmiş çıktılar ─────────────────────────────────
+# Release dosyaları GitHub Releases üzerinden dağıtılır, repoya girmez.
+*.exe
+*.msi
+*.msix
+*.pdb
+
+# ── Editör / işletim sistemi ───────────────────────────
+.vscode/
+.idea/
+*.swp
+*~
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ── Loglar / geçici ────────────────────────────────────
+*.log
+staging/

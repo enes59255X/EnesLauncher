@@ -1,0 +1,33 @@
+[package]
+name = "enes-launcher-app"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tauri = { version = "2.0", features = [] }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+uuid = { workspace = true }
+reqwest = { workspace = true }
+futures-util = { workspace = true }
+tempfile = { workspace = true }
+launcher-core = { path = "../../../crates/launcher-core" }
+archive-security = { path = "../../../crates/archive-security" }
+persistence = { path = "../../../crates/persistence" }
+minecraft-metadata = { path = "../../../crates/minecraft-metadata" }
+download-engine = { path = "../../../crates/download-engine" }
+java-locator = { path = "../../../crates/java-locator" }
+launch-service = { path = "../../../crates/launch-service" }
+mod-provider-api = { path = "../../../crates/mod-provider-api" }
+modrinth-provider = { path = "../../../crates/modrinth-provider" }
+instance-manager = { path = "../../../crates/instance-manager" }
+loader-adapters = { path = "../../../crates/loader-adapters" }
+modpack-engine = { path = "../../../crates/modpack-engine" }
+crash-analyzer = { path = "../../../crates/crash-analyzer" }
+auth-service = { path = "../../../crates/auth-service" }
+base64 = "0.23.1"
+
+[build-dependencies]
+tauri-build = { version = "2.0", features = [] }

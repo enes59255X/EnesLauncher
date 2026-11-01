@@ -1,0 +1,19 @@
+[package]
+name = "download-engine"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+launcher-core = { path = "../launcher-core" }
+reqwest = { workspace = true }
+tokio = { workspace = true }
+futures-util = { workspace = true }
+sha1 = { workspace = true }
+sha2 = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+serde = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+

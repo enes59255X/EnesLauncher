@@ -1,0 +1,58 @@
+[workspace]
+members = [
+    "apps/desktop/src-tauri",
+    "crates/launcher-core",
+    "crates/archive-security",
+    "crates/persistence",
+    "crates/minecraft-metadata",
+    "crates/download-engine",
+    "crates/java-locator",
+    "crates/launch-service",
+    "crates/mod-provider-api",
+    "crates/modrinth-provider",
+    "crates/instance-manager",
+    "crates/loader-adapters",
+    "crates/modpack-engine",
+    "crates/crash-analyzer",
+    "crates/auth-service",
+]
+resolver = "2"
+
+[workspace.dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "2.0"
+tokio = { version = "1.40", features = ["full"] }
+tracing = { version = "0.1" }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+rusqlite = { version = "0.32", features = ["bundled"] }
+uuid = { version = "1.10", features = ["v4", "v3", "serde"] }
+sha1 = "0.10"
+sha2 = "0.10"
+zip = { version = "2.2", default-features = false, features = ["deflate"] }
+tempfile = "3.12"
+directories = "5.0"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls", "stream"] }
+futures-util = "0.3"
+winreg = "0.52"
+async-trait = "0.1"
+urlencoding = "2.1"
+walkdir = "2.5"
+regex = "1.10"
+keyring = "2.3"
+
+# --- Derleme boyutu ayarları ---------------------------------------------
+# Varsayılan dev profili tam debug sembolü (debug = 2) üretiyordu; bu, tauri /
+# windows-rs gibi ağır crate'lerde target/ klasörünü 15 GB'a çıkarıyor.
+[profile.dev]
+debug = "line-tables-only"
+incremental = true
+
+# Bağımlılıkları sembolsüz derle: rlib'ler ~%60-70 küçülür.
+[profile.dev.package."*"]
+debug = false
+opt-level = 1
+
+[profile.release]
+lto = "thin"
+strip = "symbols"

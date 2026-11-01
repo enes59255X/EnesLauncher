@@ -1,0 +1,17 @@
+[package]
+name = "persistence"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+launcher-core = { path = "../launcher-core" }
+rusqlite = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+uuid = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+

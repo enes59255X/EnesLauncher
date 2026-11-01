@@ -1,0 +1,64 @@
+/* ── EnesLauncher Temaya Göre Dinamik Değişen Ultra Kaliteli Minecraft İmleçleri ── */
+
+/* 1. VARSAYILAN: Amethyst Cyber (Neon Mor & Camgöbeği) */
+:root, body[data-theme="amethyst"] {
+  --mc-cursor-default: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M2 2L2 19L7 14L11 22L14 20.5L10 13L17 13L2 2Z' fill='%23a855f7' stroke='%230f0c24' stroke-width='1.5'/><path d='M4 5L4 15L7 12L11 19.5L12.5 18.5L9 11.5L14 11.5L4 5Z' fill='%2322d3ee' opacity='0.8'/></svg>"), auto;
+  --mc-cursor-pointer: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><path d='M22 2L26 6L14 18L10 14L22 2Z' fill='%23c084fc' stroke='%233b0764' stroke-width='1.5'/><path d='M21 3L25 7L15 17L11 13L21 3Z' fill='%23e879f9'/><path d='M20 4L22 6L14 14L12 12L20 4Z' fill='%23ffffff'/><path d='M10 14L14 18L12 20L8 16L10 14Z' fill='%2306b6d4' stroke='%23082f49' stroke-width='1'/><path d='M7 17L11 21L9 23L5 19L7 17Z' fill='%234c1d95' stroke='%232e1065' stroke-width='1'/><path d='M5 19L9 23L7 25L3 21L5 19Z' fill='%2306b6d4' stroke='%23082f49' stroke-width='1'/></svg>"), pointer;
+}
+
+/* 2. WARDEN & DEEP DARK (Sculk Turkuaz & Derin Mavi) */
+body[data-theme="warden"] {
+  --mc-cursor-default: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M2 2L2 19L7 14L11 22L14 20.5L10 13L17 13L2 2Z' fill='%2300f5d4' stroke='%23020617' stroke-width='1.5'/><path d='M4 5L4 15L7 12L11 19.5L12.5 18.5L9 11.5L14 11.5L4 5Z' fill='%2338bdf8' opacity='0.8'/></svg>"), auto;
+  --mc-cursor-pointer: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><path d='M22 2L26 6L14 18L10 14L22 2Z' fill='%2300f5d4' stroke='%23022c22' stroke-width='1.5'/><path d='M21 3L25 7L15 17L11 13L21 3Z' fill='%235eead4'/><path d='M20 4L22 6L14 14L12 12L20 4Z' fill='%23ffffff'/><path d='M10 14L14 18L12 20L8 16L10 14Z' fill='%230284c7' stroke='%23082f49' stroke-width='1'/><path d='M7 17L11 21L9 23L5 19L7 17Z' fill='%230f172a' stroke='%23020617' stroke-width='1'/><path d='M5 19L9 23L7 25L3 21L5 19Z' fill='%2300f5d4' stroke='%23022c22' stroke-width='1'/></svg>"), pointer;
+}
+
+/* 3. EMERALD OBSIDIAN (Zümrüt Yeşili) */
+body[data-theme="emerald"] {
+  --mc-cursor-default: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M2 2L2 19L7 14L11 22L14 20.5L10 13L17 13L2 2Z' fill='%2310b981' stroke='%23061512' stroke-width='1.5'/><path d='M4 5L4 15L7 12L11 19.5L12.5 18.5L9 11.5L14 11.5L4 5Z' fill='%2334d399' opacity='0.8'/></svg>"), auto;
+  --mc-cursor-pointer: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><path d='M22 2L26 6L14 18L10 14L22 2Z' fill='%2310b981' stroke='%23064e3b' stroke-width='1.5'/><path d='M21 3L25 7L15 17L11 13L21 3Z' fill='%2334d399'/><path d='M20 4L22 6L14 14L12 12L20 4Z' fill='%23ffffff'/><path d='M10 14L14 18L12 20L8 16L10 14Z' fill='%23047857' stroke='%23064e3b' stroke-width='1'/><path d='M7 17L11 21L9 23L5 19L7 17Z' fill='%2378350f' stroke='%23451a03' stroke-width='1'/><path d='M5 19L9 23L7 25L3 21L5 19Z' fill='%2310b981' stroke='%23064e3b' stroke-width='1'/></svg>"), pointer;
+}
+
+/* 4. CRIMSON NETHER (Ateş & Köz Kırmızısı) */
+body[data-theme="crimson"] {
+  --mc-cursor-default: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M2 2L2 19L7 14L11 22L14 20.5L10 13L17 13L2 2Z' fill='%23f43f5e' stroke='%23180407' stroke-width='1.5'/><path d='M4 5L4 15L7 12L11 19.5L12.5 18.5L9 11.5L14 11.5L4 5Z' fill='%23fb7185' opacity='0.8'/></svg>"), auto;
+  --mc-cursor-pointer: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><path d='M22 2L26 6L14 18L10 14L22 2Z' fill='%23f43f5e' stroke='%23881337' stroke-width='1.5'/><path d='M21 3L25 7L15 17L11 13L21 3Z' fill='%23fb7185'/><path d='M20 4L22 6L14 14L12 12L20 4Z' fill='%23ffffff'/><path d='M10 14L14 18L12 20L8 16L10 14Z' fill='%23f59e0b' stroke='%2378350f' stroke-width='1'/><path d='M7 17L11 21L9 23L5 19L7 17Z' fill='%2327272a' stroke='%2318181b' stroke-width='1'/><path d='M5 19L9 23L7 25L3 21L5 19Z' fill='%23f43f5e' stroke='%23881337' stroke-width='1'/></svg>"), pointer;
+}
+
+/* 5. PRISMARINE OCEAN (Turkuaz & Deniz Mavisi) */
+body[data-theme="ocean"] {
+  --mc-cursor-default: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M2 2L2 19L7 14L11 22L14 20.5L10 13L17 13L2 2Z' fill='%230ea5e9' stroke='%2302070c' stroke-width='1.5'/><path d='M4 5L4 15L7 12L11 19.5L12.5 18.5L9 11.5L14 11.5L4 5Z' fill='%2338bdf8' opacity='0.8'/></svg>"), auto;
+  --mc-cursor-pointer: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><path d='M22 2L26 6L14 18L10 14L22 2Z' fill='%230ea5e9' stroke='%230369a1' stroke-width='1.5'/><path d='M21 3L25 7L15 17L11 13L21 3Z' fill='%2338bdf8'/><path d='M20 4L22 6L14 14L12 12L20 4Z' fill='%23ffffff'/><path d='M10 14L14 18L12 20L8 16L10 14Z' fill='%230d9488' stroke='%23115e59' stroke-width='1'/><path d='M7 17L11 21L9 23L5 19L7 17Z' fill='%231e293b' stroke='%230f172a' stroke-width='1'/><path d='M5 19L9 23L7 25L3 21L5 19Z' fill='%230ea5e9' stroke='%230369a1' stroke-width='1'/></svg>"), pointer;
+}
+
+/* 6. END VOID (Ejderha Moru & Obsidyen) */
+body[data-theme="ender"] {
+  --mc-cursor-default: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M2 2L2 19L7 14L11 22L14 20.5L10 13L17 13L2 2Z' fill='%23d946ef' stroke='%2305020a' stroke-width='1.5'/><path d='M4 5L4 15L7 12L11 19.5L12.5 18.5L9 11.5L14 11.5L4 5Z' fill='%23e879f9' opacity='0.8'/></svg>"), auto;
+  --mc-cursor-pointer: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><path d='M22 2L26 6L14 18L10 14L22 2Z' fill='%23d946ef' stroke='%23701a75' stroke-width='1.5'/><path d='M21 3L25 7L15 17L11 13L21 3Z' fill='%23f0abfc'/><path d='M20 4L22 6L14 14L12 12L20 4Z' fill='%23ffffff'/><path d='M10 14L14 18L12 20L8 16L10 14Z' fill='%2386198f' stroke='%23581c87' stroke-width='1'/><path d='M7 17L11 21L9 23L5 19L7 17Z' fill='%231e1b4b' stroke='%230f0e26' stroke-width='1'/><path d='M5 19L9 23L7 25L3 21L5 19Z' fill='%23d946ef' stroke='%23701a75' stroke-width='1'/></svg>"), pointer;
+}
+
+body, html {
+  cursor: var(--mc-cursor-default) !important;
+}
+
+button, a, input[type="button"], input[type="submit"], select, .cursor-pointer {
+  cursor: var(--mc-cursor-pointer) !important;
+}
+
+button:active, a:active {
+  transform: scale(0.98);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(10, 15, 29, 0.6);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.35);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.65);
+}

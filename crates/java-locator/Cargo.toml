@@ -1,0 +1,15 @@
+[package]
+name = "java-locator"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+launcher-core = { path = "../launcher-core" }
+serde = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+winreg = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+

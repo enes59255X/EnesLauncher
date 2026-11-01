@@ -1,0 +1,23 @@
+[package]
+name = "modpack-engine"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+launcher-core = { path = "../launcher-core" }
+archive-security = { path = "../archive-security" }
+download-engine = { path = "../download-engine" }
+persistence = { path = "../persistence" }
+instance-manager = { path = "../instance-manager" }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+zip = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+uuid = { workspace = true }
+walkdir = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+

@@ -1,0 +1,11 @@
+# İsteğe bağlı yerel ayar.
+#
+# Derleme cache'ini proje klasörünün dışında tutmak isterseniz bu dosyayı
+# `.cargo\config.toml` adıyla kopyalayın (o dosya .gitignore'da):
+#
+#   Copy-Item .cargo\config.toml.example .cargo\config.toml
+#
+# Varsayılan davranış: cache proje içindeki `target/` klasörüdür ve git'e girmez.
+[build]
+# Örnek (yorumu kaldırın ve yolu kendinize göre düzenleyin):
+# target-dir = "D:/cargo-cache/EnesLauncher"
