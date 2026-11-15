@@ -65,64 +65,70 @@ export const themeStyles: Record<
   }
 > = {
   warden: {
-    name: "Warden & Deep Dark (Sculk Turkuaz)",
-    primary: "from-teal-400 via-cyan-400 to-sky-500",
-    secondary: "text-cyan-400",
-    accentGlow: "rgba(0, 245, 212, 0.3)",
-    borderAccent: "border-cyan-500/40 hover:border-teal-400/60",
-    badgeBg: "bg-cyan-950/60 text-cyan-300 border-cyan-500/30",
-    bgGradient: "radial-gradient(ellipse at 50% 0%, #031e28 0%, #020c13 50%, #010408 100%)",
-    particleColors: ["#00f5d4", "#38bdf8", "#0284c7", "#5eead4"],
+    name: "Warden",
+    primary: "from-teal-400 to-teal-300",
+    secondary: "text-teal-300",
+    accentGlow: "rgba(45, 212, 191, 0.16)",
+    borderAccent: "border-teal-400/30",
+    badgeBg: "bg-teal-400/10 text-teal-300 border-teal-400/25",
+    bgGradient:
+      "radial-gradient(1100px 520px at 50% -12%, rgba(45,212,191,0.09), transparent 62%)",
+    particleColors: ["#2dd4bf", "#5eead4", "#14b8a6"],
   },
   amethyst: {
-    name: "Amethyst Cyber (Neon Mor & Camgöbeği)",
-    primary: "from-purple-500 via-fuchsia-500 to-cyan-400",
-    secondary: "text-purple-400",
-    accentGlow: "rgba(168, 85, 247, 0.25)",
-    borderAccent: "border-purple-500/40 hover:border-cyan-400/60",
-    badgeBg: "bg-purple-950/60 text-purple-300 border-purple-500/30",
-    bgGradient: "radial-gradient(ellipse at 50% 0%, #1a0b2e 0%, #0d0718 50%, #06030a 100%)",
-    particleColors: ["#c084fc", "#e879f9", "#38bdf8", "#818cf8"],
+    name: "Amethyst",
+    primary: "from-violet-400 to-violet-300",
+    secondary: "text-violet-300",
+    accentGlow: "rgba(167, 139, 250, 0.16)",
+    borderAccent: "border-violet-400/30",
+    badgeBg: "bg-violet-400/10 text-violet-300 border-violet-400/25",
+    bgGradient:
+      "radial-gradient(1100px 520px at 50% -12%, rgba(167,139,250,0.09), transparent 62%)",
+    particleColors: ["#a78bfa", "#c4b5fd", "#8b5cf6"],
   },
   emerald: {
-    name: "Emerald Obsidian (Klasik Zümrüt)",
-    primary: "from-emerald-500 via-teal-400 to-cyan-300",
-    secondary: "text-emerald-400",
-    accentGlow: "rgba(16, 185, 129, 0.25)",
-    borderAccent: "border-emerald-500/40 hover:border-teal-400/60",
-    badgeBg: "bg-emerald-950/60 text-emerald-300 border-emerald-500/30",
-    bgGradient: "radial-gradient(ellipse at 50% 0%, #06241b 0%, #061512 50%, #030807 100%)",
-    particleColors: ["#34d399", "#10b981", "#2dd4bf", "#6ee7b7"],
+    name: "Emerald",
+    primary: "from-emerald-400 to-emerald-300",
+    secondary: "text-emerald-300",
+    accentGlow: "rgba(52, 211, 153, 0.16)",
+    borderAccent: "border-emerald-400/30",
+    badgeBg: "bg-emerald-400/10 text-emerald-300 border-emerald-400/25",
+    bgGradient:
+      "radial-gradient(1100px 520px at 50% -12%, rgba(52,211,153,0.09), transparent 62%)",
+    particleColors: ["#34d399", "#6ee7b7", "#10b981"],
   },
   crimson: {
-    name: "Crimson Nether (Ateş & Yakut)",
-    primary: "from-rose-500 via-red-500 to-amber-400",
-    secondary: "text-rose-400",
-    accentGlow: "rgba(244, 63, 94, 0.25)",
-    borderAccent: "border-rose-500/40 hover:border-amber-400/60",
-    badgeBg: "bg-rose-950/60 text-rose-300 border-rose-500/30",
-    bgGradient: "radial-gradient(ellipse at 50% 0%, #2b0b0e 0%, #150608 50%, #080203 100%)",
-    particleColors: ["#fb7185", "#f43f5e", "#f59e0b", "#fda4af"],
+    name: "Crimson",
+    primary: "from-rose-400 to-rose-300",
+    secondary: "text-rose-300",
+    accentGlow: "rgba(251, 113, 133, 0.16)",
+    borderAccent: "border-rose-400/30",
+    badgeBg: "bg-rose-400/10 text-rose-300 border-rose-400/25",
+    bgGradient:
+      "radial-gradient(1100px 520px at 50% -12%, rgba(251,113,133,0.09), transparent 62%)",
+    particleColors: ["#fb7185", "#fda4af", "#f43f5e"],
   },
   ocean: {
-    name: "Prismarine Ocean (Okyanus & Turkuaz)",
-    primary: "from-sky-500 via-blue-500 to-teal-400",
-    secondary: "text-sky-400",
-    accentGlow: "rgba(14, 165, 233, 0.25)",
-    borderAccent: "border-sky-500/40 hover:border-teal-400/60",
-    badgeBg: "bg-sky-950/60 text-sky-300 border-sky-500/30",
-    bgGradient: "radial-gradient(ellipse at 50% 0%, #082138 0%, #051321 50%, #02070c 100%)",
-    particleColors: ["#38bdf8", "#0ea5e9", "#2dd4bf", "#7dd3fc"],
+    name: "Ocean",
+    primary: "from-sky-400 to-sky-300",
+    secondary: "text-sky-300",
+    accentGlow: "rgba(56, 189, 248, 0.16)",
+    borderAccent: "border-sky-400/30",
+    badgeBg: "bg-sky-400/10 text-sky-300 border-sky-400/25",
+    bgGradient:
+      "radial-gradient(1100px 520px at 50% -12%, rgba(56,189,248,0.09), transparent 62%)",
+    particleColors: ["#38bdf8", "#7dd3fc", "#0ea5e9"],
   },
   ender: {
-    name: "End Void & Dragon (Ejderha Moru)",
-    primary: "from-fuchsia-500 via-purple-600 to-pink-500",
-    secondary: "text-fuchsia-400",
-    accentGlow: "rgba(217, 70, 239, 0.3)",
-    borderAccent: "border-fuchsia-500/40 hover:border-pink-400/60",
-    badgeBg: "bg-fuchsia-950/60 text-fuchsia-300 border-fuchsia-500/30",
-    bgGradient: "radial-gradient(ellipse at 50% 0%, #220326 0%, #100213 50%, #040005 100%)",
-    particleColors: ["#e879f9", "#d946ef", "#c026d3", "#f0abfc"],
+    name: "Ender",
+    primary: "from-purple-400 to-fuchsia-300",
+    secondary: "text-purple-300",
+    accentGlow: "rgba(192, 132, 252, 0.16)",
+    borderAccent: "border-purple-400/30",
+    badgeBg: "bg-purple-400/10 text-purple-300 border-purple-400/25",
+    bgGradient:
+      "radial-gradient(1100px 520px at 50% -12%, rgba(192,132,252,0.09), transparent 62%)",
+    particleColors: ["#c084fc", "#e879f9", "#a855f7"],
   },
 };
 
@@ -168,14 +174,14 @@ export function BackgroundCanvas({ settings }: { settings: BackgroundSettings })
     document.addEventListener("visibilitychange", handleVisibility);
 
     // Minecraft tarzı süzülen partiküller (Portal orbs & Sculk ruhları)
-    const count = 50;
+    const count = 22;
     const particles = Array.from({ length: count }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      size: Math.random() * 4.5 + 1.5,
+      size: Math.random() * 2.6 + 1.2,
       speedX: (Math.random() - 0.5) * 0.4,
-      speedY: -Math.random() * 0.8 - 0.2, // yukarı süzülme
-      opacity: Math.random() * 0.6 + 0.2,
+      speedY: -Math.random() * 0.45 - 0.12, // yukarı süzülme
+      opacity: Math.random() * 0.22 + 0.1,
       color:
         currentTheme.particleColors[
         Math.floor(Math.random() * currentTheme.particleColors.length)
@@ -235,7 +241,7 @@ export function BackgroundCanvas({ settings }: { settings: BackgroundSettings })
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
       {/* 1. Temel Renk Degradesi (Her zaman en arkada) */}
       <div
-        className="absolute inset-0 w-full h-full transition-all duration-700"
+        className="absolute inset-0 w-full h-full transition-opacity duration-500"
         style={{
           background: currentTheme.bgGradient,
         }}
@@ -275,13 +281,18 @@ export function BackgroundCanvas({ settings }: { settings: BackgroundSettings })
         />
       )}
 
-      {/* 4. Canvas Parçacıkları (Magical Minecraft Dust) */}
+      {/* 4. Okunabilirlik perdesi — metin ve paneller arka plan görselinin üstünde kalsın */}
+      {(settings.type === "custom_video" || settings.type === "custom_image") && (
+        <div className="absolute inset-0 bg-black/80 pointer-events-none z-10" />
+      )}
+
+      {/* 5. Canvas Parçacıkları */}
       {settings.particlesEnabled && (
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-10" />
       )}
 
-      {/* 5. Üst Karartma / Vignette Katmanı */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/70 via-transparent to-[#020617]/40 pointer-events-none z-10" />
+      {/* 6. Vignette */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/25 pointer-events-none z-10" />
     </div>
   );
 }

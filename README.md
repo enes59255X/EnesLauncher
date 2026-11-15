@@ -10,13 +10,13 @@ Mod kurulumu, modpack yönetimi, çoklu profil, Microsoft hesabı ve otomatik Ja
 
 ## Ekran görüntüleri
 
-| Ana Sayfa | Mod Merkezi |
+| Ana Sayfa | Profiller |
 |---|---|
-| ![Ana Sayfa](docs/screenshots/01-ana-ekran.png) | ![Mod Merkezi](docs/screenshots/02-mod-merkezi.png) |
+| ![Ana Sayfa](docs/screenshots/01-ana-ekran.png) | ![Profiller](docs/screenshots/02-profiller.png) |
 
-| Modpack Keşfi | Shaderpack Merkezi |
+| Mod Merkezi | Modpack Keşfi |
 |---|---|
-| ![Modpack Keşfi](docs/screenshots/03-modpack.png) | ![Shaderpack Merkezi](docs/screenshots/04-shaderpack.png) |
+| ![Mod Merkezi](docs/screenshots/03-mod-merkezi.png) | ![Modpack Keşfi](docs/screenshots/04-modpack.png) |
 
 ### Ayarlar, Temalar & Özelleştirme
 

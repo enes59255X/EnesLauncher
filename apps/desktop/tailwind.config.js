@@ -1,42 +1,57 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       fontFamily: {
-        'sans': ['Segoe UI', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Inter', 'sans-serif'],
-        'mono': ['Consolas', 'Cascadia Code', 'ui-monospace', 'monospace'],
+        sans: [
+          "Segoe UI Variable Display",
+          "Segoe UI",
+          "ui-sans-serif",
+          "system-ui",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Inter",
+          "sans-serif",
+        ],
+        mono: ["Cascadia Mono", "Consolas", "ui-monospace", "monospace"],
       },
       colors: {
-        background: "#0a0d14",
-        surface: "#111726",
-        "surface-light": "#192238",
-        border: "#202d4a",
-        primary: {
-          DEFAULT: "#10b981", // Emerald 500
-          hover: "#059669",
-          glow: "rgba(16, 185, 129, 0.2)",
+        // Nötr yüzeyler (index.css tokenlarıyla aynı değerler)
+        canvas: "#0a0b0d",
+        background: "#0a0b0d",
+        surface: {
+          DEFAULT: "#101114",
+          2: "#16181c",
+          3: "#1d2025",
         },
+        ink: {
+          DEFAULT: "#e9ebef",
+          muted: "#99a1ad",
+          dim: "#69707c",
+        },
+        // İnce ayırıcı çizgiler
+        line: {
+          DEFAULT: "#23262c",
+          strong: "#33373f",
+        },
+        // Tema vurgusu: CSS değişkeninden gelir
         accent: {
-          cyan: "#06b6d4",
-          amber: "#f59e0b",
-          rose: "#f43f5e",
-        }
-      },
-      animation: {
-        'shimmer': 'shimmer 1.5s linear infinite',
-      },
-      keyframes: {
-        shimmer: {
-          '0%': { transform: 'translateX(-100%)' },
-          '100%': { transform: 'translateX(300%)' },
+          DEFAULT: "var(--accent)",
+          hover: "var(--accent-hover)",
+          soft: "var(--accent-soft)",
         },
+      },
+      borderRadius: {
+        lg: "10px",
+        xl: "12px",
+        "2xl": "16px",
+        "3xl": "20px",
+      },
+      transitionDuration: {
+        DEFAULT: "150ms",
       },
     },
   },
   plugins: [],
-}
-
+};

@@ -21,6 +21,7 @@ import {
   Image as ImageIcon,
   Activity,
   Folder,
+  Check,
 } from "lucide-react";
 import {
   api,
@@ -210,7 +211,7 @@ export function getProfileTheme(inst?: InstanceSummary): ProfileThemeData {
   return {
     bannerBg: "radial-gradient(ellipse at 50% 100%, #15803d 0%, #166534 45%, #052e16 100%)",
     bannerScene: "overworld",
-    badgeIcon: "🌿",
+    badgeIcon: "",
     badgeGlow: "rgba(74,222,128,0.5)",
     badgeBg: "linear-gradient(135deg, #16a34a, #166534)",
     accentColor: "#4ade80",
@@ -225,54 +226,36 @@ export function getProfileTheme(inst?: InstanceSummary): ProfileThemeData {
 // ── Özel EnesLauncher 3D Neon Küp Logosu ────────────────────────────────────
 
 function LauncherLogo({
-  size = 40,
-  theme = "amethyst",
+  size = 32,
 }: {
   size?: number;
   theme?: ThemePreset;
 }) {
-  const currentTheme = themeStyles[theme] || themeStyles.amethyst;
-
   return (
     <div
-      style={{
-        width: size,
-        height: size,
-        boxShadow: `0 0 20px ${currentTheme.accentGlow}`,
-      }}
-      className={`relative flex items-center justify-center rounded-2xl bg-gradient-to-tr ${currentTheme.primary} p-[2px] shadow-xl group transition-transform hover:scale-105`}
+      style={{ width: size, height: size }}
+      className="relative flex items-center justify-center rounded-[10px] bg-accent-soft border border-line"
     >
-      <div className="w-full h-full bg-[#0a0718] rounded-[14px] flex items-center justify-center overflow-hidden relative">
-        <div className="absolute -inset-1 bg-gradient-to-r from-purple-500/20 to-cyan-400/20 blur-sm opacity-75 group-hover:opacity-100 transition-opacity" />
-        <svg
-          viewBox="0 0 32 32"
-          className="w-3/5 h-3/5 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {/* Minecraft İzometrik Küp */}
-          <path
-            d="M16 3L28 9.5V22.5L16 29L4 22.5V9.5L16 3Z"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M16 3V16M16 16L28 9.5M16 16L4 9.5M16 16V29"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinejoin="round"
-            strokeOpacity="0.5"
-          />
-          {/* Ortadaki Neon 'E' Harfi */}
-          <path
-            d="M13 12H19M13 16H17.5M13 20H19"
-            stroke="#ffffff"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-          />
-        </svg>
-      </div>
+      <svg
+        viewBox="0 0 32 32"
+        className="w-1/2 h-1/2 text-accent"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M16 4L27 10V22L16 28L5 22V10L16 4Z"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M16 4V16M16 16L27 10M16 16L5 10M16 16V28"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinejoin="round"
+          strokeOpacity="0.45"
+        />
+      </svg>
     </div>
   );
 }
@@ -376,7 +359,6 @@ export default function App() {
   // Aktif Profil & Tema
   const selectedInstance = instances.find((i) => i.id === selectedInstanceId) || instances[0];
   const activeAccount = accounts.find((a) => a.is_active) || accounts[0];
-  const currentTheme = themeStyles[bgSettings.presetTheme] || themeStyles.amethyst;
 
   useEffect(() => {
     loadData();
@@ -1232,97 +1214,30 @@ export default function App() {
     return (
       <div
         key={inst.id}
-        className={`relative rounded-3xl bg-[#1c1b22] border-4 border-[#2d2c38] shadow-2xl overflow-hidden transition-all duration-300 ${
-          isDashboardHero ? "w-full" : "hover:border-[#4b4d5a] hover:scale-[1.01]"
-        } ${isSelected ? "ring-2 ring-emerald-500/50 shadow-[0_0_35px_rgba(16,185,129,0.2)]" : ""}`}
+        className={`relative rounded-2xl bg-surface-2 border border-line overflow-hidden transition-all duration-300 ${
+          isDashboardHero ? "w-full" : "hover:border-line-strong"
+        } ${isSelected ? "ring-1 ring-accent/40" : ""}`}
       >
         {/* 1. Üst Banner — Gerçekçi & Zarif Minecraft Arka Planı (Karikatürize nesneler kaldırıldı) */}
-        <div
-          className="relative w-full h-44 md:h-52 overflow-hidden border-b-4 border-[#2d2c38] select-none"
-          style={{ background: theme.bannerBg }}
-        >
-          {/* Gerçekçi Sahne Işıklandırmaları ve Gökyüzü (Kullanıcı Referans Tasarımı) */}
-          {theme.bannerScene === "void" && (
-            <>
-              {/* Dolunay ve Gece Gökyüzü */}
-              <div className="absolute top-4 right-20 w-16 h-16 rounded-full bg-slate-100 shadow-[0_0_45px_rgba(255,255,255,0.9)] opacity-95" />
-              <div className="absolute inset-0 bg-[radial-gradient(#c084fc_1px,transparent_1px)] [background-size:24px_24px] opacity-30" />
-              
-              {/* Obsidyen Portal Efekti (Merkez/Sol) */}
-              <div className="absolute bottom-2 left-32 w-28 h-40 border-4 border-[#181124] bg-purple-950/90 rounded-md shadow-[0_0_35px_rgba(168,85,247,0.7)] flex items-center justify-center overflow-hidden opacity-90 hidden sm:flex">
-                <div className="w-full h-full bg-gradient-to-t from-fuchsia-600/40 via-purple-600/60 to-indigo-900/50 animate-pulse flex items-center justify-center text-4xl select-none">
-                  🌀
-                </div>
-              </div>
-
-              {/* Enderman Silueti (Sağ) */}
-              <div className="absolute bottom-2 right-28 flex flex-col items-center opacity-85 select-none hidden sm:flex">
-                <div className="w-4 h-4 bg-black rounded-xs shadow-[0_0_8px_#c084fc] flex items-center justify-around px-0.5">
-                  <div className="w-1 h-1 bg-fuchsia-400 rounded-full animate-ping" />
-                  <div className="w-1 h-1 bg-fuchsia-400 rounded-full animate-ping" />
-                </div>
-                <div className="w-2.5 h-14 bg-black" />
-                <div className="flex gap-2">
-                  <div className="w-1 h-16 bg-black" />
-                  <div className="w-1 h-16 bg-black" />
-                </div>
-              </div>
-
-              <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-[#1c1b22] via-purple-950/40 to-transparent" />
-            </>
-          )}
-
-          {theme.bannerScene === "nether" && (
-            <>
-              {/* Nether Bazalt ve Magma Işıltısı */}
-              <div className="absolute inset-0 bg-gradient-to-t from-red-950 via-red-900/40 to-transparent" />
-              <div className="absolute bottom-0 inset-x-0 h-14 bg-gradient-to-t from-orange-600/35 via-red-600/15 to-transparent animate-pulse" />
-              <div className="absolute inset-0 bg-[radial-gradient(#f97316_1px,transparent_1px)] [background-size:20px_20px] opacity-25" />
-            </>
-          )}
-
-          {theme.bannerScene === "tech" && (
-            <>
-              {/* Endüstriyel Create / Steampunk Izgara Ağı */}
-              <div className="absolute inset-0 bg-[radial-gradient(#38bdf8_1.5px,transparent_1.5px)] [background-size:18px_18px] opacity-35" />
-              <div className="absolute bottom-0 inset-x-0 h-14 bg-gradient-to-t from-cyan-950/80 to-transparent" />
-            </>
-          )}
-
-          {theme.bannerScene === "twilight" && (
-            <>
-              {/* Alacakaranlık / Büyülü Doğa */}
-              <div className="absolute top-4 right-14 w-12 h-12 rounded-full bg-teal-300 shadow-[0_0_30px_#2dd4bf] opacity-80" />
-              <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-teal-950/40 to-transparent" />
-              <div className="absolute inset-0 bg-[radial-gradient(#34d399_1px,transparent_1px)] [background-size:22px_22px] opacity-25" />
-            </>
-          )}
-
-          {theme.bannerScene === "overworld" && (
-            <>
-              {/* Klasik Minecraft Dağ Gündoğumu */}
-              <div className="absolute top-4 right-14 w-14 h-14 rounded-full bg-amber-200 shadow-[0_0_35px_#fde047] opacity-90" />
-              <div className="absolute bottom-0 inset-x-0 h-14 bg-gradient-to-t from-emerald-950 via-emerald-900/30 to-transparent" />
-              <div className="absolute inset-0 bg-[radial-gradient(#4ade80_1px,transparent_1px)] [background-size:24px_24px] opacity-20" />
-            </>
-          )}
+        <div className="relative w-full h-24 overflow-hidden select-none bg-gradient-to-br from-accent/10 via-surface-2 to-surface-2">
+          {/* Sade renk gecisi â€” dekoratif sahne ogeleri kaldirildi */}
 
           {/* Karartma degrade */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1c1b22] via-transparent to-black/35 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#16181c] via-[#16181c]/35 to-transparent pointer-events-none" />
 
           {/* Üst Sağ Aksiyon Alanı: FPS Optimize Et Butonu & Sil Butonu */}
           <div className="absolute top-3 right-3 flex items-center gap-2 z-20">
-            {/* ⚡ FPS Optimize Et Butonu */}
+            {/* FPS Optimize Et Butonu */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 handleOptimizeProfile(inst);
               }}
-              className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/25 to-emerald-500/25 hover:from-amber-500/40 hover:to-emerald-500/40 border border-amber-400/50 hover:border-emerald-400 text-amber-200 hover:text-white font-black text-xs flex items-center gap-1.5 shadow-[0_0_15px_rgba(245,158,11,0.25)] hover:scale-105 active:scale-95 transition-all backdrop-blur-md"
+              className="px-3 h-8 rounded-lg border border-line text-ink-muted hover:text-ink hover:bg-white/[0.04] text-[12px] font-medium flex items-center gap-1.5 transition-colors"
               title="Bu profilin grafik, chunk ve JVM ayarlarını maksimum FPS için optimize et"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span>⚡ FPS Optimize Et</span>
+              <span>FPS Optimize Et</span>
             </button>
 
             {/* Sil Butonu */}
@@ -1332,7 +1247,7 @@ export default function App() {
                   e.stopPropagation();
                   handleDeleteInstance(inst.id);
                 }}
-                className="p-2 bg-black/60 hover:bg-red-600/80 text-slate-300 hover:text-white rounded-xl backdrop-blur-md transition-all shadow-lg"
+                className="p-2 bg-black/50 hover:bg-red-600/80 text-ink-muted hover:text-ink rounded-lg transition-colors"
                 title="Profili Sil"
               >
                 <Trash2 className="w-4 h-4" />
@@ -1342,28 +1257,28 @@ export default function App() {
 
           {/* Sol Altta Çıkıntılı Tematik Rozet */}
           <div
-            className="absolute -bottom-6 left-6 w-16 h-16 rounded-2xl border-4 border-[#2d2c38] shadow-2xl flex items-center justify-center text-3xl z-20 bg-[#16161e] transition-transform hover:scale-105"
-            style={{ background: theme.badgeBg, boxShadow: `0 0 25px ${theme.badgeGlow}` }}
+            className="absolute -bottom-5 left-6 w-11 h-11 rounded-xl border border-line bg-surface-2 flex items-center justify-center z-20"
+            
           >
-            <span>{theme.badgeIcon}</span>
+            <Box className="w-5 h-5 text-accent" />
           </div>
         </div>
 
         {/* 2. Kart Gövdesi & İstatistikler */}
-        <div className="pt-9 px-6 pb-6 space-y-4">
+        <div className="pt-8 px-6 pb-6 space-y-4">
           {/* Başlık ve Gerçek Sürüm Bilgisi */}
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-3 flex-wrap">
-              <h3 className="text-xl md:text-2xl font-black text-white tracking-wider font-mono uppercase">
+              <h3 className="text-xl md:text-2xl font-semibold text-ink tracking-tight">
                 {inst.name}
               </h3>
-              <span className="text-cyan-300 font-mono text-xs font-bold bg-[#121217] px-2.5 py-1 rounded-md border border-cyan-500/30">
+              <span className="chip font-mono text-[11px]">
                 MC v{inst.minecraft_version} · {inst.loader_type.toUpperCase()}{inst.loader_version ? ` (${inst.loader_version})` : ""}
               </span>
             </div>
             {isSelected && (
-              <span className="text-[10px] font-black text-emerald-400 bg-emerald-950/80 border border-emerald-500/50 px-2.5 py-0.5 rounded-full shadow-[0_0_12px_rgba(16,185,129,0.3)]">
-                ● AKTİF PROFİL
+              <span className="chip chip-accent">
+                Aktif profil
               </span>
             )}
           </div>
@@ -1371,63 +1286,62 @@ export default function App() {
           {/* 6'lı Minecraft Taş Panel Izgarası (Referans Görsel Tasarımı) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
             {/* 1. Mod Sayısı */}
-            <div className="bg-[#121217] border-2 border-[#262631] hover:border-[#383748] rounded-xl p-2.5 flex items-center gap-2.5 transition-all">
-              <span className="text-xl">⚙️</span>
+            <div className="bg-surface-2 border border-line hover:border-line-strong rounded-lg px-3 py-2.5 flex items-center gap-2.5 transition-colors">
+              
               <div className="min-w-0">
-                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Mod Sayısı:</p>
-                <p className="text-xs font-black text-white font-mono truncate">{modCount} Mod Kurulu</p>
+                <p className="text-[10px] font-medium text-ink-dim">Mod Sayısı:</p>
+                <p className="text-xs font-semibold text-ink font-mono truncate">{modCount} Mod Kurulu</p>
               </div>
             </div>
 
             {/* 2. RAM Gereksinimi */}
-            <div className="bg-[#121217] border-2 border-[#262631] hover:border-[#383748] rounded-xl p-2.5 flex items-center gap-2.5 transition-all">
-              <span className="text-xl">💾</span>
+            <div className="bg-surface-2 border border-line hover:border-line-strong rounded-lg px-3 py-2.5 flex items-center gap-2.5 transition-colors">
+              
               <div className="min-w-0">
-                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">RAM Gereksinimi:</p>
-                <p className="text-xs font-black text-purple-300 font-mono truncate">
+                <p className="text-[10px] font-medium text-ink-dim">RAM Gereksinimi:</p>
+                <p className="text-xs font-semibold text-ink-muted font-mono truncate">
                   {(inst.allocated_memory_mb / 1024).toFixed(0)} GB ({inst.allocated_memory_mb} MB)
                 </p>
               </div>
             </div>
 
             {/* 3. Son Güncelleme */}
-            <div className="bg-[#121217] border-2 border-[#262631] hover:border-[#383748] rounded-xl p-2.5 flex items-center gap-2.5 transition-all">
-              <span className="text-xl">🔄</span>
+            <div className="bg-surface-2 border border-line hover:border-line-strong rounded-lg px-3 py-2.5 flex items-center gap-2.5 transition-colors">
               <div className="min-w-0">
-                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Son Güncelleme:</p>
-                <p className="text-xs font-black text-amber-300 font-mono truncate">{theme.lastUpdated}</p>
+                <p className="text-[10px] font-medium text-ink-dim">Son Güncelleme:</p>
+                <p className="text-xs font-semibold text-ink font-mono truncate">{theme.lastUpdated}</p>
               </div>
             </div>
 
             {/* 4. Topluluk ve Profil Durumu (Gerçek Veri) */}
-            <div className="bg-[#121217] border-2 border-[#262631] hover:border-[#383748] rounded-xl p-2.5 flex items-center gap-2.5 transition-all">
-              <span className="text-xl">👥</span>
+            <div className="bg-surface-2 border border-line hover:border-line-strong rounded-lg px-3 py-2.5 flex items-center gap-2.5 transition-colors">
+              
               <div className="min-w-0">
-                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Topluluk Puanı:</p>
-                <p className="text-xs font-black text-emerald-400 font-mono truncate">
+                <p className="text-[10px] font-medium text-ink-dim">Topluluk Puanı:</p>
+                <p className="text-xs font-semibold text-ink font-mono truncate">
                   {theme.rating}
                 </p>
               </div>
             </div>
 
             {/* 5. Türü & Loader */}
-            <div className="bg-[#121217] border-2 border-[#262631] hover:border-[#383748] rounded-xl p-2.5 flex items-center gap-2.5 transition-all">
-              <span className="text-xl">🧩</span>
+            <div className="bg-surface-2 border border-line hover:border-line-strong rounded-lg px-3 py-2.5 flex items-center gap-2.5 transition-colors">
+              
               <div className="min-w-0">
-                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Türü:</p>
-                <p className="text-xs font-black text-slate-200 font-mono truncate">
+                <p className="text-[10px] font-medium text-ink-dim">Türü:</p>
+                <p className="text-xs font-semibold text-ink font-mono truncate">
                   {theme.tags}
                 </p>
               </div>
             </div>
 
             {/* 6. Performans / FPS Optimizasyonu */}
-            <div className="bg-[#121217] border-2 border-[#262631] hover:border-[#383748] rounded-xl p-2.5 flex items-center gap-2.5 transition-all">
-              <span className="text-xl">🚀</span>
+            <div className="bg-surface-2 border border-line hover:border-line-strong rounded-lg px-3 py-2.5 flex items-center gap-2.5 transition-colors">
+              
               <div className="min-w-0">
-                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Optimizasyon:</p>
-                <p className="text-xs font-black text-cyan-300 font-mono flex items-center gap-1.5 truncate">
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shrink-0" />
+                <p className="text-[10px] font-medium text-ink-dim">Optimizasyon:</p>
+                <p className="text-xs font-semibold text-accent font-mono flex items-center gap-1.5 truncate">
+                  
                   <span>Fast Graphics · Aikar's G1GC</span>
                 </p>
               </div>
@@ -1450,9 +1364,9 @@ export default function App() {
                   isSaving: false,
                 });
               }}
-              className="sm:col-span-1 py-3 px-3 rounded-xl bg-[#2e2f38] hover:bg-[#383a45] border-t-2 border-l-2 border-[#4b4d5a] border-b-4 border-r-4 border-[#16171d] active:border-b-2 active:border-t-4 active:translate-y-0.5 text-slate-200 font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-md"
+              className="sm:col-span-1 h-11 rounded-lg border border-line text-ink-muted hover:text-ink hover:bg-white/[0.04] text-[13px] font-medium flex items-center justify-center gap-2 transition-colors"
             >
-              <Settings className="w-3.5 h-3.5 text-slate-300" />
+              <Settings className="w-3.5 h-3.5 text-ink" />
               <span>Ayarlar</span>
             </button>
 
@@ -1464,14 +1378,14 @@ export default function App() {
                 handleLaunchGame();
               }}
               disabled={isLaunching}
-              className={`sm:col-span-2 py-3 px-5 rounded-xl font-black text-sm flex items-center justify-center gap-2.5 transition-all border-t-2 border-l-2 border-b-4 border-r-4 shadow-[0_0_25px_rgba(46,204,113,0.4)] ${
+              className={`sm:col-span-2 h-11 rounded-lg text-[13px] font-semibold flex items-center justify-center gap-2 transition-colors ${
                 isLaunching
-                  ? "bg-slate-700 text-slate-400 border-slate-800 cursor-not-allowed"
-                  : "bg-gradient-to-b from-[#2ecc71] to-[#27ae60] hover:from-[#3fe068] hover:to-[#2ecc71] border-[#58d68d] border-b-[#1e8449] border-r-[#1e8449] text-white hover:scale-[1.01] active:border-b-2 active:border-t-4 active:translate-y-0.5"
+                  ? "bg-surface-3 text-ink-dim cursor-not-allowed"
+                  : "bg-accent hover:bg-accent-hover text-[#0a0b0d]"
               }`}
             >
-              <span className="text-lg">⚔️</span>
-              <span className="tracking-widest uppercase">{isLaunching ? "Başlatılıyor..." : "OYNA"}</span>
+              <Play className="w-4 h-4" />
+              <span>{isLaunching ? "Başlatılıyor..." : "Oyna"}</span>
             </button>
 
             {/* 3. Klasörü Aç (Minecraft Taş Buton) */}
@@ -1485,9 +1399,9 @@ export default function App() {
                   alert("Klasör açılamadı: " + err);
                 }
               }}
-              className="sm:col-span-1 py-3 px-3 rounded-xl bg-[#2e2f38] hover:bg-[#383a45] border-t-2 border-l-2 border-[#4b4d5a] border-b-4 border-r-4 border-[#16171d] active:border-b-2 active:border-t-4 active:translate-y-0.5 text-slate-200 font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-md"
+              className="sm:col-span-1 h-11 rounded-lg border border-line text-ink-muted hover:text-ink hover:bg-white/[0.04] text-[13px] font-medium flex items-center justify-center gap-2 transition-colors"
             >
-              <Folder className="w-3.5 h-3.5 text-slate-300" />
+              <Folder className="w-3.5 h-3.5 text-ink" />
               <span>Klasörü Aç</span>
             </button>
           </div>
@@ -1497,190 +1411,69 @@ export default function App() {
   }
 
   return (
-    <div className="relative flex h-screen w-screen text-slate-100 select-none overflow-hidden font-sans">
+    <div className="relative flex h-screen w-screen text-ink select-none overflow-hidden font-sans">
       {/* ── DİNAMİK ARKA PLAN KATMANI (Video / Görsel / Parçacıklar) ──────── */}
       <BackgroundCanvas settings={bgSettings} />
 
       {/* ── SOL MENÜ (SIDEBAR) ────────────────────────────────────────────── */}
-      <aside className="relative w-64 bg-[#090616]/85 backdrop-blur-2xl border-r border-purple-500/20 flex flex-col justify-between p-4 z-20 shadow-2xl">
-        <div className="space-y-6">
-          {/* Logo & Marka Başlığı */}
-          <div className="flex items-center gap-3 px-2 py-1">
-            <LauncherLogo size={42} theme={bgSettings.presetTheme} />
-            <div>
-              <h1
-                className={`font-black text-base tracking-wide bg-gradient-to-r ${currentTheme.primary} bg-clip-text text-transparent flex items-center gap-1.5`}
-              >
+      <aside className="relative w-60 bg-surface border-r border-line flex flex-col justify-between px-3 py-4 z-20">
+        <div className="space-y-5">
+          {/* Logo & Marka */}
+          <div className="flex items-center gap-2.5 px-2 pb-5">
+            <LauncherLogo size={34} theme={bgSettings.presetTheme} />
+            <div className="min-w-0">
+              <h1 className="text-[14px] font-semibold tracking-tight text-ink leading-tight">
                 EnesLauncher
               </h1>
-              <p
-                className={`text-[10px] font-bold ${currentTheme.secondary} tracking-widest uppercase flex items-center gap-1`}
-              >
-                <span>Cyber Edition</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+              <p className="text-[11px] text-ink-dim leading-tight mt-0.5">
+                Minecraft Java Edition
               </p>
             </div>
           </div>
 
-          {/* Menü Linkleri */}
-          <nav className="space-y-1">
-            <button
-              onClick={() => {
-                sfx.playSwitch();
-                setActiveTab("dashboard");
-              }}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === "dashboard"
-                  ? "bg-gradient-to-r from-purple-500/25 to-cyan-500/15 text-cyan-300 border border-cyan-500/30 shadow-[0_0_15px_rgba(34,211,238,0.2)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
-                }`}
-            >
-              <Play className="w-4 h-4 text-cyan-400" />
-              <span>Ana Sayfa</span>
-            </button>
-
-            <button
-              onClick={() => {
-                sfx.playSwitch();
-                setActiveTab("instances");
-              }}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === "instances"
-                  ? "bg-gradient-to-r from-purple-500/25 to-cyan-500/15 text-cyan-300 border border-cyan-500/30 shadow-[0_0_15px_rgba(34,211,238,0.2)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
-                }`}
-            >
-              <Layers className="w-4 h-4 text-purple-400" />
-              <div className="flex-1 flex items-center justify-between">
-                <span>Profiller (Instances)</span>
-                <span className="text-[10px] bg-purple-950/80 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-full font-mono">
-                  {instances.length}
-                </span>
-              </div>
-            </button>
-
-            <button
-              onClick={() => {
-                sfx.playSwitch();
-                setActiveTab("mods");
-              }}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === "mods"
-                  ? "bg-gradient-to-r from-purple-500/25 to-cyan-500/15 text-cyan-300 border border-cyan-500/30 shadow-[0_0_15px_rgba(34,211,238,0.2)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
-                }`}
-            >
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              <span>Mod Merkezi</span>
-            </button>
-
-            <button
-              onClick={() => {
-                sfx.playSwitch();
-                setActiveTab("modpacks");
-              }}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === "modpacks"
-                  ? "bg-gradient-to-r from-purple-500/25 to-cyan-500/15 text-cyan-300 border border-cyan-500/30 shadow-[0_0_15px_rgba(34,211,238,0.2)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
-                }`}
-            >
-              <Box className="w-4 h-4 text-emerald-400" />
-              <span>Modpack (.mrpack)</span>
-            </button>
-
-            {/* Shaderpack Sekmesi */}
-            <button
-              onClick={() => {
-                sfx.playSwitch();
-                setActiveTab("shaders");
-              }}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === "shaders"
-                  ? "bg-gradient-to-r from-purple-500/25 to-cyan-500/15 text-cyan-300 border border-cyan-500/30 shadow-[0_0_15px_rgba(34,211,238,0.2)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
-                }`}
-            >
-              <Sun className="w-4 h-4 text-yellow-400" />
-              <span>Shaderpack</span>
-            </button>
-
-            <button
-              onClick={() => {
-                sfx.playSwitch();
-                setActiveTab("downloads");
-              }}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all relative ${activeTab === "downloads"
-                  ? "bg-gradient-to-r from-purple-500/25 to-cyan-500/15 text-cyan-300 border border-cyan-500/30 shadow-[0_0_15px_rgba(34,211,238,0.2)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
-                }`}
-            >
-              <Download className="w-4 h-4 text-cyan-400" />
-              <div className="flex-1 flex items-center justify-between">
-                <span>İndirmeler</span>
-                {activeDownloads.filter((d) => d.status === "downloading").length > 0 && (
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-                )}
-              </div>
-            </button>
-
-            <button
-              onClick={() => {
-                sfx.playSwitch();
-                setActiveTab("accounts");
-              }}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === "accounts"
-                  ? "bg-gradient-to-r from-purple-500/25 to-cyan-500/15 text-cyan-300 border border-cyan-500/30 shadow-[0_0_15px_rgba(34,211,238,0.2)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
-                }`}
-            >
-              <User className="w-4 h-4 text-rose-400" />
-              <span>Hesaplar (Online/Offline)</span>
-            </button>
-
-            {/* AI Log & Teşhis (Canlandırıldı) */}
-            <button
-              onClick={() => {
-                sfx.playSwitch();
-                setActiveTab("logs");
-              }}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === "logs"
-                  ? "bg-gradient-to-r from-purple-500/25 to-cyan-500/15 text-cyan-300 border border-cyan-500/30 shadow-[0_0_15px_rgba(34,211,238,0.2)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
-                }`}
-            >
-              <Terminal className="w-4 h-4 text-fuchsia-400" />
-              <div className="flex-1 flex items-center justify-between">
-                <span>AI Log & Teşhis</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-fuchsia-400 animate-pulse" />
-              </div>
-            </button>
-
-            <button
-              onClick={() => {
-                sfx.playSwitch();
-                setActiveTab("settings");
-              }}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${activeTab === "settings"
-                  ? "bg-gradient-to-r from-purple-500/25 to-cyan-500/15 text-cyan-300 border border-cyan-500/30 shadow-[0_0_15px_rgba(34,211,238,0.2)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
-                }`}
-            >
-              <Settings className="w-4 h-4 text-slate-300" />
-              <span>Ayarlar & Temalar</span>
-            </button>
+          {/* Menü */}
+          <nav className="space-y-0.5">
+            {[
+              { id: "dashboard", label: "Ana Sayfa", icon: Play },
+              { id: "instances", label: "Profiller", icon: Layers, badge: instances.length },
+              { id: "mods", label: "Mod Merkezi", icon: Sparkles },
+              { id: "modpacks", label: "Modpack", icon: Box },
+              { id: "shaders", label: "Shaderpack", icon: Sun },
+              { id: "downloads", label: "İndirmeler", icon: Download, dot: activeDownloads.filter((d) => d.status === "downloading").length > 0 },
+              { id: "accounts", label: "Hesaplar", icon: User },
+              { id: "logs", label: "Log & Teşhis", icon: Terminal },
+              { id: "settings", label: "Ayarlar & Temalar", icon: Settings },
+            ].map(({ id, label, icon: Icon, badge, dot }) => (
+              <button
+                key={id}
+                onClick={() => {
+                  sfx.playSwitch();
+                  setActiveTab(id as typeof activeTab);
+                }}
+                className={`nav-item ${activeTab === id ? "nav-item-active" : ""}`}
+              >
+                <Icon />
+                <span className="flex-1 text-left">{label}</span>
+                {badge !== undefined && badge > 0 && <span className="chip">{badge}</span>}
+                {dot && <span className="w-1.5 h-1.5 rounded-full bg-accent" />}
+              </button>
+            ))}
           </nav>
         </div>
 
-        {/* ALT KULLANICI & MÜZİK KONTROLÜ */}
-        <div className="pt-4 border-t border-purple-500/20 space-y-3">
-          {/* Hızlı Müzik & SFX Kontrol Çubuğu */}
-          <div className="flex items-center justify-between px-2 py-1 bg-black/40 rounded-xl border border-white/5 text-[11px] text-slate-400 font-mono">
+        {/* Alt bölüm: ses kontrolü, hesap, imza */}
+        <div className="pt-4 border-t border-line space-y-2">
+          <div className="flex items-center justify-between px-1 text-[11px] text-ink-dim">
             <button
               onClick={() => {
                 sfx.playClick();
                 bgm.togglePlay();
               }}
-              className="flex items-center gap-1.5 hover:text-cyan-400 transition-colors"
+              className="flex items-center gap-1.5 hover:text-ink transition-colors"
               title={isBgmPlaying ? "Müziği Duraklat" : "Arka Plan Müziğini Çal"}
             >
-              <Music className={`w-3.5 h-3.5 ${isBgmPlaying ? "text-cyan-400 animate-spin" : ""}`} />
-              <span>{isBgmPlaying ? "BGM Çalıyor" : "BGM Kapalı"}</span>
+              <Music className={`w-3.5 h-3.5 ${isBgmPlaying ? "text-accent" : ""}`} />
+              <span>{isBgmPlaying ? "Müzik açık" : "Müzik kapalı"}</span>
             </button>
 
             <button
@@ -1690,42 +1483,40 @@ export default function App() {
                 sfx.setEnabled(next);
                 if (next) sfx.playPop();
               }}
-              className="p-1 hover:text-purple-400 transition-colors"
-              title="SFX Ses Efektleri"
+              className="p-1 hover:text-ink transition-colors"
+              title="Ses efektleri"
             >
-              {sfxEnabled ? <Volume2 className="w-3.5 h-3.5 text-purple-400" /> : <VolumeX className="w-3.5 h-3.5" />}
+              {sfxEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
             </button>
           </div>
 
-          {/* Aktif Oyuncu Kartı */}
-          <div className="flex items-center gap-3 p-2 rounded-xl bg-purple-950/30 border border-purple-500/20">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 to-cyan-500 flex items-center justify-center font-bold text-white shadow-md">
+          <div className="flex items-center gap-2.5 px-2 py-2 rounded-lg border border-line bg-surface-2">
+            <div className="w-7 h-7 rounded-md bg-accent-soft text-accent flex items-center justify-center text-[12px] font-semibold">
               {activeAccount?.username?.substring(0, 1).toUpperCase() || "E"}
             </div>
-            <div className="flex-1 overflow-hidden">
-              <p className="text-xs font-bold text-white truncate">
+            <div className="flex-1 min-w-0">
+              <p className="text-[12px] font-medium text-ink truncate">
                 {activeAccount?.username || "Enes"}
               </p>
-              <p className="text-[10px] text-emerald-400 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                {activeAccount?.account_type === "microsoft" ? "Çevrimiçi" : "Çevrimdışı Mod"}
+              <p className="text-[11px] text-ink-dim flex items-center gap-1.5">
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ${activeAccount?.account_type === "microsoft" ? "bg-emerald-400" : "bg-ink-dim"}`}
+                />
+                {activeAccount?.account_type === "microsoft" ? "Çevrimiçi" : "Çevrimdışı"}
               </p>
             </div>
           </div>
 
-          {/* Yapımcı Linki (Instagram: @55_eness) */}
           <button
             onClick={copyInstagramHandle}
-            className="w-full mt-2 px-3 py-2 rounded-xl bg-gradient-to-r from-purple-900/40 via-pink-900/30 to-cyan-900/30 border border-purple-500/30 hover:border-pink-500/60 text-white font-bold text-xs flex items-center justify-between group transition-all hover:scale-[1.02] shadow-md cursor-pointer"
-            title="Instagram Profilini Doğrudan Aç: @55_eness"
+            className="w-full flex items-center justify-between px-2 py-1.5 rounded-lg text-[11px] text-ink-dim hover:text-ink hover:bg-white/[0.04] transition-colors"
+            title="Instagram: @55_eness"
           >
-            <div className="flex items-center gap-2">
-              <Instagram className="w-4 h-4 text-pink-400 group-hover:scale-110 transition-transform" />
-              <span className="text-[11px] text-slate-200">Enes Talha Elcan</span>
-            </div>
-            <span className="text-[9px] font-mono text-pink-300 bg-pink-950/80 px-2 py-0.5 rounded-full border border-pink-500/40">
-              @55_eness ↗
+            <span className="flex items-center gap-1.5">
+              <Instagram className="w-3.5 h-3.5" />
+              Enes Talha Elcan
             </span>
+            <span className="font-mono text-[10px]">@55_eness</span>
           </button>
         </div>
       </aside>
@@ -1733,9 +1524,9 @@ export default function App() {
       {/* ── SAĞ ANA İÇERİK ALANI ─────────────────────────────────────────── */}
       <main className="relative flex-1 flex flex-col h-screen overflow-y-auto bg-transparent z-10">
         {/* ÜST BİLGİ ŞERİDİ (TOPBAR) */}
-        <header className="h-14 border-b border-purple-500/20 bg-[#090616]/60 backdrop-blur-xl flex items-center justify-between px-8 sticky top-0 z-20">
+        <header className="h-14 border-b border-line bg-canvas flex items-center justify-between px-8 sticky top-0 z-20">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+            <span className="page-title">
               {activeTab === "dashboard"
                 ? "Ana Sayfa"
                 : activeTab === "instances"
@@ -1758,18 +1549,18 @@ export default function App() {
 
           <div className="flex items-center gap-4">
             {/* Profil Seçici */}
-            <div className="flex items-center gap-2 bg-[#0d0a21]/80 px-3 py-1.5 rounded-xl border border-purple-500/30">
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+            <div className="flex items-center gap-2 bg-surface-2 px-3 h-8 rounded-lg border border-line">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent" />
               <select
                 value={selectedInstanceId}
                 onChange={(e) => {
                   sfx.playClick();
                   setSelectedInstanceId(e.target.value);
                 }}
-                className="bg-transparent text-xs font-bold text-slate-200 outline-none cursor-pointer"
+                className="bg-transparent text-[12px] font-medium text-ink outline-none cursor-pointer"
               >
                 {instances.map((i) => (
-                  <option key={i.id} value={i.id} className="bg-[#0f0c24] text-white">
+                  <option key={i.id} value={i.id} className="bg-surface-2 text-ink">
                     {i.name} ({i.minecraft_version} {i.loader_type.toUpperCase()})
                   </option>
                 ))}
@@ -1777,8 +1568,8 @@ export default function App() {
             </div>
 
             {/* Tema Önizleme Butonu */}
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-purple-950/40 border border-purple-500/30 text-xs font-mono text-purple-300">
-              <Palette className="w-3.5 h-3.5 text-cyan-400" />
+            <div className="chip">
+              <Palette className="w-3 h-3" />
               <span className="capitalize">{bgSettings.presetTheme}</span>
             </div>
           </div>
@@ -1793,8 +1584,8 @@ export default function App() {
               {selectedInstance ? (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-400 tracking-wider uppercase flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                    <span className="text-xs font-bold text-ink-muted tracking-wider uppercase flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400" />
                       Aktif Seçili Profil
                     </span>
                     <button
@@ -1802,7 +1593,7 @@ export default function App() {
                         sfx.playClick();
                         setActiveTab("instances");
                       }}
-                      className="text-xs text-cyan-400 hover:text-cyan-300 font-bold transition-colors"
+                      className="text-xs text-accent hover:text-accent font-bold transition-colors"
                     >
                       Tüm Profilleri Yönet ({instances.length}) →
                     </button>
@@ -1810,14 +1601,14 @@ export default function App() {
                   {renderInstanceCard(selectedInstance, true)}
                 </div>
               ) : (
-                <div className="p-12 rounded-3xl bg-[#1c1b22] border-4 border-[#2d2c38] text-center space-y-4">
-                  <p className="text-lg font-bold text-white">Henüz yüklü bir profiliniz bulunmuyor.</p>
+                <div className="p-12 rounded-2xl bg-surface-2 border border-line text-center space-y-4">
+                  <p className="text-lg font-bold text-ink">Henüz yüklü bir profiliniz bulunmuyor.</p>
                   <button
                     onClick={() => {
                       sfx.playClick();
                       setIsAddModalOpen(true);
                     }}
-                    className="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm shadow-lg shadow-purple-600/30"
+                    className="px-6 py-3 rounded-xl bg-accent hover:bg-accent-hover text-[#0a0b0d] font-bold text-sm shadow-lg shadow-purple-600/30"
                   >
                     + İlk Profilini Oluştur
                   </button>
@@ -1826,9 +1617,9 @@ export default function App() {
 
               {/* Başlatma / Bilgilendirme Mesajı */}
               {launchMessage && (
-                <div className={`p-4 rounded-2xl text-xs font-mono flex items-center justify-between backdrop-blur-xl transition-all ${
+                <div className={`p-4 rounded-2xl text-xs font-mono flex items-center justify-between transition-all ${
                   launchMessage.startsWith("✅")
-                    ? "bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+                    ? "bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
                     : launchMessage.startsWith("⚠️")
                     ? "bg-amber-950/80 border border-amber-500/50 text-amber-300 shadow-[0_0_20px_rgba(245,158,11,0.2)]"
                     : "bg-red-950/80 border border-red-500/50 text-red-300 shadow-[0_0_20px_rgba(239,68,68,0.2)]"
@@ -1836,79 +1627,84 @@ export default function App() {
                   <span className="leading-relaxed">{launchMessage}</span>
                   <button
                     onClick={() => setLaunchMessage(null)}
-                    className="text-slate-400 hover:text-white ml-4 p-1 rounded-lg hover:bg-white/10 transition-colors"
+                    className="text-ink-muted hover:text-ink ml-4 p-1 rounded-lg hover:bg-white/10 transition-colors"
                   >
                     <X className="w-4 h-4" />
                   </button>
                 </div>
               )}
 
-              {/* HIZLI GEZİNME KARTLARI (Tasarım hatası çözüldü, statik CSS renk sınıfları) */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {/* Hızlı gezinme */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {[
                   {
                     tab: "instances",
-                    icon: "🗂️",
+                    icon: Layers,
                     label: "Profiller",
-                    value: `${instances.length} Adet`,
+                    value: `${instances.length}`,
+                    suffix: "adet",
                     desc: "İzole kurulumlar",
-                    borderCls: "border-purple-500/30 hover:border-purple-400/70",
-                    glowColor: "rgba(168,85,247,0.4)",
                   },
                   {
                     tab: "modpacks",
-                    icon: "📦",
-                    label: "Modpack Keşfi",
-                    value: "Tek Tıkla",
+                    icon: Box,
+                    label: "Modpack",
+                    value: "Tek",
+                    suffix: "tıkla",
                     desc: "Hazır paketler",
-                    borderCls: "border-emerald-500/30 hover:border-emerald-400/70",
-                    glowColor: "rgba(16,185,129,0.4)",
                   },
                   {
                     tab: "shaders",
-                    icon: "✨",
+                    icon: Sun,
                     label: "Shaderpack",
-                    value: `${installedShaders.length} Kurulu`,
+                    value: `${installedShaders.length}`,
+                    suffix: "kurulu",
                     desc: "Iris & Oculus",
-                    borderCls: "border-amber-500/30 hover:border-amber-400/70",
-                    glowColor: "rgba(245,158,11,0.4)",
                   },
                   {
                     tab: "accounts",
-                    icon: "👤",
-                    label: "Hesap Durumu",
+                    icon: User,
+                    label: "Hesap",
                     value: activeAccount?.username || "Enes",
-                    desc: activeAccount?.account_type === "microsoft" ? "Microsoft Online" : "Çevrimdışı",
-                    borderCls: "border-cyan-500/30 hover:border-cyan-400/70",
-                    glowColor: "rgba(34,211,238,0.4)",
+                    suffix: "",
+                    desc:
+                      activeAccount?.account_type === "microsoft"
+                        ? "Microsoft"
+                        : "Çevrimdışı",
                   },
-                ].map(({ tab, icon, label, value, desc, borderCls, glowColor }) => (
-                  <div
+                ].map(({ tab, icon: Icon, label, value, suffix, desc }) => (
+                  <button
                     key={tab}
                     onClick={() => {
                       sfx.playClick();
-                      setActiveTab(tab as any);
+                      setActiveTab(tab as typeof activeTab);
                     }}
-                    className={`relative overflow-hidden p-5 rounded-2xl bg-[#0c081d]/80 border ${borderCls} transition-all cursor-pointer group space-y-2 backdrop-blur-xl shadow-lg hover:scale-[1.03]`}
-                    onMouseEnter={(e) => (e.currentTarget.style.boxShadow = `0 0 25px ${glowColor}`)}
-                    onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "")}
+                    className="panel panel-hover p-4 text-left group"
                   >
-                    <div className="absolute top-2 right-2 text-3xl opacity-10 pointer-events-none">{icon}</div>
-                    <div className="flex items-center justify-between text-slate-400">
-                      <span className="text-xs font-bold uppercase tracking-wider">{label}</span>
-                      <span className="text-xl group-hover:scale-125 transition-transform">{icon}</span>
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-[12px] font-medium text-ink-muted">
+                        {label}
+                      </span>
+                      <Icon className="w-4 h-4 text-ink-dim group-hover:text-accent transition-colors" />
                     </div>
-                    <p className="text-xl font-black text-white">{value}</p>
-                    <p className="text-[11px] text-slate-500">{desc}</p>
-                  </div>
+                    <p className="text-[19px] font-semibold text-ink leading-none">
+                      {value}
+                      {suffix && (
+                        <span className="text-[12px] font-normal text-ink-dim ml-1">
+                          {suffix}
+                        </span>
+                      )}
+                    </p>
+                    <p className="text-[11px] text-ink-dim mt-1.5">{desc}</p>
+                  </button>
                 ))}
               </div>
 
               {/* DİĞER YÜKLÜ PROFİLLER (HIZLI GEÇİŞ PANELİ) */}
               {instances.length > 1 && (
                 <div className="space-y-3 pt-2">
-                  <h3 className="text-sm font-black text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                    <span>🗂️</span> Diğer Yüklü Profiller
+                  <h3 className="text-sm font-semibold text-ink uppercase tracking-wider flex items-center gap-2">
+                    Diğer Yüklü Profiller
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     {instances
@@ -1921,7 +1717,7 @@ export default function App() {
                             sfx.playClick();
                             setSelectedInstanceId(inst.id);
                           }}
-                          className="p-4 rounded-xl border border-purple-500/20 hover:border-cyan-400/60 bg-[#0b081a]/70 hover:bg-[#120c2b] cursor-pointer transition-all hover:scale-[1.02] flex items-center justify-between"
+                          className="p-4 rounded-xl border border-line hover:border-accent/50 bg-surface/90 hover:bg-surface-2 cursor-pointer transition-all flex items-center justify-between"
                         >
                           <div className="flex items-center gap-2.5">
                             <span className="text-xl">
@@ -1931,16 +1727,16 @@ export default function App() {
                                 ? "🪡"
                                 : inst.loader_type === "neoforge"
                                 ? "⚡"
-                                : "🌿"}
+                                : ""}
                             </span>
                             <div>
-                              <p className="text-xs font-black text-white">{inst.name}</p>
-                              <p className="text-[10px] text-slate-400 font-mono">
+                              <p className="text-xs font-semibold text-ink">{inst.name}</p>
+                              <p className="text-[10px] text-ink-muted font-mono">
                                 MC {inst.minecraft_version} · {inst.loader_type.toUpperCase()}
                               </p>
                             </div>
                           </div>
-                          <span className="text-[10px] font-bold text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded-lg border border-cyan-500/30">
+                          <span className="text-[10px] font-bold text-accent bg-cyan-950/60 px-2 py-0.5 rounded-lg border border-line">
                             Geçiş Yap
                           </span>
                         </div>
@@ -1956,8 +1752,8 @@ export default function App() {
             <div className="max-w-6xl mx-auto space-y-6 animate-fadeIn">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-black text-white flex items-center gap-2">🗂️ Yüklü Profiller</h2>
-                  <p className="text-xs text-slate-400">
+                  <h2 className="text-2xl font-semibold text-ink flex items-center gap-2">🗂️ Yüklü Profiller</h2>
+                  <p className="text-xs text-ink-muted">
                     Her profil ve modpack kendi modlarını, dünyalarını ve ayarlarını tamamen izole tutar.
                   </p>
                 </div>
@@ -1966,7 +1762,7 @@ export default function App() {
                     sfx.playClick();
                     setIsAddModalOpen(true);
                   }}
-                  className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-purple-600/30 transition-all"
+                  className="px-4 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-[#0a0b0d] font-bold text-xs flex items-center gap-2 shadow-lg shadow-purple-600/30 transition-all"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Yeni Profil Oluştur</span>
@@ -1985,16 +1781,16 @@ export default function App() {
             <div className="max-w-6xl mx-auto space-y-5 animate-fadeIn">
               <div className="flex items-center justify-between flex-wrap gap-3">
                 <div>
-                  <h2 className="text-2xl font-black text-white flex items-center gap-2">🧩 Mod Merkezi</h2>
-                  <p className="text-xs text-slate-400">Profile: <span className="text-cyan-300 font-bold">{selectedInstance?.name || "—"}</span> · Modrinth API</p>
+                  <h2 className="text-2xl font-semibold text-ink flex items-center gap-2">🧩 Mod Merkezi</h2>
+                  <p className="text-xs text-ink-muted">Profile: <span className="text-accent font-bold">{selectedInstance?.name || "—"}</span> · Modrinth API</p>
                 </div>
-                <div className="flex items-center gap-2 bg-[#0d0a21] p-1 rounded-xl border border-purple-500/20">
+                <div className="flex items-center gap-2 bg-surface-2 p-1 rounded-xl border border-line">
                   <button onClick={() => { sfx.playClick(); setModSubTab("search"); }}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${modSubTab === "search" ? "bg-purple-600 text-white shadow-md" : "text-slate-400 hover:text-white"}`}>
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${modSubTab === "search" ? "bg-accent text-ink shadow-md" : "text-ink-muted hover:text-ink"}`}>
                     🔍 Mod Keşfi
                   </button>
                   <button onClick={() => { sfx.playClick(); setModSubTab("installed"); }}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${modSubTab === "installed" ? "bg-purple-600 text-white shadow-md" : "text-slate-400 hover:text-white"}`}>
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${modSubTab === "installed" ? "bg-accent text-ink shadow-md" : "text-ink-muted hover:text-ink"}`}>
                     📦 Kurulu ({installedMods.length})
                   </button>
                 </div>
@@ -2006,36 +1802,36 @@ export default function App() {
                   <form onSubmit={(e) => handleSearchMods(e, 0)} className="space-y-3">
                     <div className="flex gap-3">
                       <div className="flex-1 relative">
-                        <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                        <Search className="w-4 h-4 text-ink-muted absolute left-3 top-3" />
                         <input type="text" value={modSearchQuery} onChange={(e) => setModSearchQuery(e.target.value)}
                           placeholder="Mod adı ara (örn: JEI, Sodium, TACZ, Create)..."
-                          className="w-full pl-9 pr-4 py-2.5 bg-[#0b081a]/80 border border-purple-500/20 rounded-xl text-xs text-white placeholder-slate-500 focus:border-cyan-400 outline-none" />
+                          className="w-full pl-9 pr-4 py-2.5 bg-surface/95 border border-line rounded-xl text-xs text-ink placeholder:text-ink-dim focus:border-accent outline-none" />
                       </div>
                       <button type="submit" disabled={isSearchingMods}
-                        className="px-6 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs rounded-xl shadow-md transition-all">
+                        className="px-6 py-2.5 bg-accent hover:bg-accent-hover text-[#0a0b0d] font-bold text-xs rounded-xl shadow-md transition-all">
                         {isSearchingMods ? "⏳ Aranıyor..." : "🔍 Ara"}
                       </button>
                     </div>
                     {/* Filtreler */}
                     <div className="flex gap-3 flex-wrap">
                       <select value={modSortBy} onChange={(e) => setModSortBy(e.target.value as any)}
-                        className="px-3 py-2 bg-[#0b081a] border border-purple-500/20 rounded-xl text-xs text-slate-300 outline-none focus:border-cyan-400">
+                        className="px-3 py-2 bg-surface border border-line rounded-xl text-xs text-ink outline-none focus:border-accent">
                         <option value="relevance">📊 İlgililik</option>
-                        <option value="downloads">⬇️ İndirme</option>
-                        <option value="follows">❤️ Takipçi</option>
+                        <option value="downloads">️ İndirme</option>
+                        <option value="follows">️ Takipçi</option>
                         <option value="newest">🆕 En Yeni</option>
                         <option value="updated">🔄 Güncelleme</option>
                       </select>
                       <select value={modLoader} onChange={(e) => setModLoader(e.target.value)}
-                        className="px-3 py-2 bg-[#0b081a] border border-purple-500/20 rounded-xl text-xs text-slate-300 outline-none focus:border-cyan-400">
+                        className="px-3 py-2 bg-surface border border-line rounded-xl text-xs text-ink outline-none focus:border-accent">
                         <option value="">🔧 Tüm Yükleyiciler</option>
-                        <option value="forge">⚒️ Forge</option>
+                        <option value="forge">️ Forge</option>
                         <option value="fabric">🪡 Fabric</option>
                         <option value="neoforge">🆕 NeoForge</option>
                         <option value="quilt">🪢 Quilt</option>
                       </select>
                       <select value={modVersion} onChange={(e) => setModVersion(e.target.value)}
-                        className="px-3 py-2 bg-[#0b081a] border border-purple-500/20 rounded-xl text-xs text-slate-300 outline-none focus:border-cyan-400">
+                        className="px-3 py-2 bg-surface border border-line rounded-xl text-xs text-ink outline-none focus:border-accent">
                         <option value="">🎮 Tüm Sürümler</option>
                         {["1.21.4","1.21.1","1.20.1","1.20.4","1.19.2","1.18.2","1.16.5","1.12.2"].map(v => (
                           <option key={v} value={v}>{v}</option>
@@ -2046,36 +1842,36 @@ export default function App() {
 
                   {modSearchResults.length === 0 && !isSearchingMods && (
                     <div className="p-16 text-center space-y-3">
-                      <div className="text-5xl animate-blockBounce">🧩</div>
-                      <p className="text-slate-400 text-sm font-bold">Mod aramak için yukarıdan arama yapın</p>
-                      <p className="text-slate-500 text-xs">Modrinth'teki binlerce modu keşfedin</p>
+                      <div className="w-12 h-12 mx-auto rounded-xl border border-line bg-surface-2 flex items-center justify-center"><Search className="w-5 h-5 text-ink-dim" /></div>
+                      <p className="text-ink-muted text-sm font-bold">Mod aramak için yukarıdan arama yapın</p>
+                      <p className="text-ink-dim text-xs">Modrinth'teki binlerce modu keşfedin</p>
                     </div>
                   )}
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {modSearchResults.map((mod) => (
                       <div key={mod.project_id}
-                        className="group p-5 rounded-2xl bg-[#0c081d]/80 border border-purple-500/20 hover:border-cyan-400/40 transition-all flex gap-4 backdrop-blur-xl hover:shadow-[0_0_20px_rgba(168,85,247,0.15)] hover:scale-[1.01]">
+                        className="group p-5 rounded-2xl bg-surface/95 border border-line hover:border-line/40 transition-all flex gap-4 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]">
                         {mod.icon_url ? (
                           <img src={mod.icon_url} alt={mod.title} className="w-14 h-14 rounded-xl object-cover shrink-0 border border-white/10" />
                         ) : (
-                          <div className="w-14 h-14 rounded-xl bg-purple-950/80 border border-purple-500/30 flex items-center justify-center text-2xl shrink-0">🧩</div>
+                          <div className="w-14 h-14 rounded-xl bg-purple-950/80 border border-line flex items-center justify-center text-2xl shrink-0">🧩</div>
                         )}
                         <div className="flex-1 min-w-0 space-y-1.5">
                           <div className="flex items-start justify-between gap-2">
-                            <h4 className="text-sm font-bold text-white leading-tight">{mod.title}</h4>
+                            <h4 className="text-sm font-bold text-ink leading-tight">{mod.title}</h4>
                             {mod.categories?.slice(0,2).map((cat: string) => (
-                              <span key={cat} className="text-[9px] px-1.5 py-0.5 rounded bg-purple-950/60 border border-purple-500/30 text-purple-300 shrink-0">{cat}</span>
+                              <span key={cat} className="text-[9px] px-1.5 py-0.5 rounded bg-purple-950/60 border border-line text-ink-muted shrink-0">{cat}</span>
                             ))}
                           </div>
-                          <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">{mod.description}</p>
+                          <p className="text-[11px] text-ink-muted line-clamp-2 leading-relaxed">{mod.description}</p>
                           <div className="flex items-center justify-between pt-1">
                             <div className="flex items-center gap-3 text-[10px] font-mono">
-                              <span className="text-cyan-400">⬇️ {(mod.downloads / 1000).toFixed(0)}k</span>
-                              <span className="text-pink-400">❤️ {(mod.follows / 1000).toFixed(1)}k</span>
+                              <span className="text-accent">⬇️ {(mod.downloads / 1000).toFixed(0)}k</span>
+                              <span className="text-ink-dim">❤️ {(mod.follows / 1000).toFixed(1)}k</span>
                             </div>
                             <button onClick={() => openVersionSelector(mod, "mod")}
-                              className="px-4 py-1.5 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white rounded-lg text-xs font-bold transition-all shadow-md hover:shadow-[0_0_12px_rgba(168,85,247,0.4)] active:scale-95">
+                              className="px-4 py-1.5 bg-accent hover:bg-accent-hover text-[#0a0b0d] rounded-lg text-xs font-bold transition-all shadow-md hover:shadow-[0_0_12px_rgba(168,85,247,0.4)]">
                               ⚡ Kur
                             </button>
                           </div>
@@ -2088,15 +1884,15 @@ export default function App() {
                   {modTotalHits > MOD_PAGE_SIZE && (
                     <div className="flex items-center justify-center gap-4 pt-2">
                       <button onClick={() => handleSearchMods(undefined, modPage - 1)} disabled={modPage === 0}
-                        className="px-4 py-2 bg-[#0b081a] border border-purple-500/30 text-purple-300 rounded-xl text-xs font-bold disabled:opacity-40 hover:border-cyan-400/50 transition-all">
+                        className="px-4 py-2 bg-surface border border-line text-ink-muted rounded-xl text-xs font-bold disabled:opacity-40 hover:border-line transition-all">
                         ← Önceki
                       </button>
-                      <span className="text-xs text-slate-400 font-mono">
+                      <span className="text-xs text-ink-muted font-mono">
                         Sayfa {modPage + 1} / {Math.ceil(modTotalHits / MOD_PAGE_SIZE)} · Toplam {modTotalHits} sonuç
                       </span>
                       <button onClick={() => handleSearchMods(undefined, modPage + 1)}
                         disabled={modPage >= Math.ceil(modTotalHits / MOD_PAGE_SIZE) - 1}
-                        className="px-4 py-2 bg-[#0b081a] border border-purple-500/30 text-purple-300 rounded-xl text-xs font-bold disabled:opacity-40 hover:border-cyan-400/50 transition-all">
+                        className="px-4 py-2 bg-surface border border-line text-ink-muted rounded-xl text-xs font-bold disabled:opacity-40 hover:border-line transition-all">
                         Sonraki →
                       </button>
                     </div>
@@ -2109,24 +1905,24 @@ export default function App() {
                   {installedMods.length === 0 ? (
                     <div className="p-16 text-center space-y-3">
                       <div className="text-5xl">📦</div>
-                      <p className="text-slate-400 text-sm">Bu profilde kurulu mod yok</p>
+                      <p className="text-ink-muted text-sm">Bu profilde kurulu mod yok</p>
                     </div>
                   ) : installedMods.map((mod) => (
                     <div key={mod.file_name}
-                      className="p-4 rounded-xl bg-[#0b081a]/80 border border-purple-500/20 hover:border-purple-400/40 flex items-center justify-between text-xs font-mono transition-all group">
+                      className="p-4 rounded-xl bg-surface/95 border border-line hover:border-purple-400/40 flex items-center justify-between text-xs font-mono transition-all group">
                       <div className="flex items-center gap-3">
                         <div className={`w-2.5 h-2.5 rounded-full transition-all ${mod.is_enabled ? "bg-emerald-400 shadow-[0_0_8px_#34d399]" : "bg-slate-600"}`} />
                         <div>
-                          <p className={`font-bold ${mod.is_enabled ? "text-white" : "text-slate-500 line-through"}`}>{mod.file_name}</p>
-                          <p className="text-slate-500 text-[10px]">{(mod.file_size / 1024).toFixed(0)} KB</p>
+                          <p className={`font-bold ${mod.is_enabled ? "text-ink" : "text-ink-dim line-through"}`}>{mod.file_name}</p>
+                          <p className="text-ink-dim text-[10px]">{(mod.file_size / 1024).toFixed(0)} KB</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         <button onClick={() => handleToggleMod(mod.file_name)}
-                          className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${mod.is_enabled ? "bg-amber-900/40 border border-amber-500/30 text-amber-300 hover:bg-amber-900/60" : "bg-emerald-900/40 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-900/60"}`}>
+                          className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${mod.is_enabled ? "bg-amber-900/40 border border-amber-500/30 text-amber-300 hover:bg-amber-900/60" : "bg-emerald-900/40 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-900/60"}`}>
                           {mod.is_enabled ? "⏸ Devre Dışı" : "▶ Etkinleştir"}
                         </button>
-                        <button onClick={() => handleDeleteMod(mod.file_name)} className="p-1.5 text-slate-500 hover:text-red-400 transition-colors">
+                        <button onClick={() => handleDeleteMod(mod.file_name)} className="p-1.5 text-ink-dim hover:text-red-400 transition-colors">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
@@ -2141,30 +1937,30 @@ export default function App() {
           {activeTab === "modpacks" && (
             <div className="max-w-6xl mx-auto space-y-5 animate-fadeIn">
               <div>
-                <h2 className="text-2xl font-black text-white flex items-center gap-2">📦 Modpack Keşfi</h2>
-                <p className="text-xs text-slate-400">Modrinth API · Tek tıkla kur · Sürüm & loader seç</p>
+                <h2 className="text-2xl font-semibold text-ink flex items-center gap-2">📦 Modpack Keşfi</h2>
+                <p className="text-xs text-ink-muted">Modrinth API · Tek tıkla kur · Sürüm & loader seç</p>
               </div>
 
               {/* Arama + Filtreler */}
               <form onSubmit={(e) => handleSearchModpacks(e, 0)} className="space-y-3">
                 <div className="flex gap-3">
                   <div className="flex-1 relative">
-                    <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                    <Search className="w-4 h-4 text-ink-muted absolute left-3 top-3" />
                     <input type="text" value={modpackSearchQuery} onChange={(e) => setModpackSearchQuery(e.target.value)}
                       placeholder="Mod paketi ara (örn: TACZ, Fabulously Optimized, All of Fabric)..."
-                      className="w-full pl-9 pr-4 py-2.5 bg-[#0b081a]/80 border border-purple-500/20 rounded-xl text-xs text-white placeholder-slate-500 focus:border-cyan-400 outline-none" />
+                      className="w-full pl-9 pr-4 py-2.5 bg-surface/95 border border-line rounded-xl text-xs text-ink placeholder:text-ink-dim focus:border-accent outline-none" />
                   </div>
                   <button type="submit" disabled={isSearchingModpacks}
-                    className="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl shadow-md transition-all">
+                    className="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-[#0a0b0d] font-bold text-xs rounded-xl shadow-md transition-all">
                     {isSearchingModpacks ? "⏳ Aranıyor..." : "📦 Paket Ara"}
                   </button>
                 </div>
                 <div className="flex gap-3">
                   <select value={modpackSortBy} onChange={(e) => setModpackSortBy(e.target.value as any)}
-                    className="px-3 py-2 bg-[#0b081a] border border-purple-500/20 rounded-xl text-xs text-slate-300 outline-none focus:border-cyan-400">
-                    <option value="downloads">⬇️ En Çok İndirilen</option>
+                    className="px-3 py-2 bg-surface border border-line rounded-xl text-xs text-ink outline-none focus:border-accent">
+                    <option value="downloads">️ En Çok İndirilen</option>
                     <option value="relevance">📊 İlgililik</option>
-                    <option value="follows">❤️ Takipçi</option>
+                    <option value="follows">️ Takipçi</option>
                     <option value="newest">🆕 En Yeni</option>
                     <option value="updated">🔄 Son Güncelleme</option>
                   </select>
@@ -2173,29 +1969,29 @@ export default function App() {
 
               {modpackSearchResults.length === 0 && !isSearchingModpacks && (
                 <div className="p-16 text-center space-y-3">
-                  <div className="text-5xl animate-blockBounce">📦</div>
-                  <p className="text-slate-400 text-sm font-bold">Modpack aramak için yukarıdan arama yapın</p>
+                  <div className="w-12 h-12 mx-auto rounded-xl border border-line bg-surface-2 flex items-center justify-center"><Search className="w-5 h-5 text-ink-dim" /></div>
+                  <p className="text-ink-muted text-sm font-bold">Modpack aramak için yukarıdan arama yapın</p>
                 </div>
               )}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {modpackSearchResults.map((pack) => (
                   <div key={pack.project_id}
-                    className="group p-5 rounded-2xl bg-[#0c081d]/80 border border-emerald-500/20 hover:border-emerald-400/50 transition-all flex gap-4 backdrop-blur-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] hover:scale-[1.01]">
+                    className="group p-5 rounded-2xl bg-surface/95 border border-emerald-500/20 hover:border-emerald-400/50 transition-all flex gap-4 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)]">
                     {pack.icon_url ? (
                       <img src={pack.icon_url} alt={pack.title} className="w-16 h-16 rounded-xl object-cover shrink-0 border border-white/10" />
                     ) : (
                       <div className="w-16 h-16 rounded-xl bg-emerald-950/60 border border-emerald-500/30 flex items-center justify-center text-3xl shrink-0">📦</div>
                     )}
                     <div className="flex-1 min-w-0 space-y-1.5">
-                      <h4 className="text-sm font-bold text-white leading-tight">{pack.title}</h4>
-                      <p className="text-[11px] text-slate-400 line-clamp-2">{pack.description}</p>
+                      <h4 className="text-sm font-bold text-ink leading-tight">{pack.title}</h4>
+                      <p className="text-[11px] text-ink-muted line-clamp-2">{pack.description}</p>
                       {/* Sürüm Seçici */}
                       {modpackVersionsMap[pack.project_id] && modpackVersionsMap[pack.project_id].length > 0 && (
                         <select
                           value={selectedVersionUrlMap[pack.project_id] || ""}
                           onChange={(e) => setSelectedVersionUrlMap((prev) => ({ ...prev, [pack.project_id]: e.target.value }))}
-                          className="w-full px-2 py-1.5 bg-[#090616] border border-emerald-500/20 rounded-lg text-[11px] text-slate-300 outline-none focus:border-cyan-400 mt-1">
+                          className="w-full px-2 py-1.5 bg-surface-2 border border-emerald-500/20 rounded-lg text-[11px] text-ink outline-none focus:border-accent mt-1">
                           {modpackVersionsMap[pack.project_id].map((v) => {
                             const file = v.files.find(f => f.primary) || v.files[0];
                             const loaders = v.loaders?.join(", ") || "?";
@@ -2214,7 +2010,7 @@ export default function App() {
                         </div>
                         <button
                           onClick={() => openVersionSelector(pack, "modpack")}
-                          className="px-4 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-bold text-xs rounded-xl shadow-md transition-all hover:shadow-[0_0_12px_rgba(16,185,129,0.4)] active:scale-95">
+                          className="px-4 py-1.5 bg-accent hover:bg-accent-hover text-[#0a0b0d] font-bold text-xs rounded-xl shadow-md transition-all hover:shadow-[0_0_12px_rgba(16,185,129,0.4)]">
                           ⚡ Kur
                         </button>
                       </div>
@@ -2227,15 +2023,15 @@ export default function App() {
               {modpackTotalHits > PACK_PAGE_SIZE && (
                 <div className="flex items-center justify-center gap-4 pt-2">
                   <button onClick={() => handleSearchModpacks(undefined, modpackPage - 1)} disabled={modpackPage === 0}
-                    className="px-4 py-2 bg-[#0b081a] border border-emerald-500/30 text-emerald-300 rounded-xl text-xs font-bold disabled:opacity-40 hover:border-cyan-400/50 transition-all">
+                    className="px-4 py-2 bg-surface border border-emerald-500/30 text-emerald-400 rounded-xl text-xs font-bold disabled:opacity-40 hover:border-line transition-all">
                     ← Önceki
                   </button>
-                  <span className="text-xs text-slate-400 font-mono">
+                  <span className="text-xs text-ink-muted font-mono">
                     Sayfa {modpackPage + 1} / {Math.ceil(modpackTotalHits / PACK_PAGE_SIZE)} · {modpackTotalHits} paket
                   </span>
                   <button onClick={() => handleSearchModpacks(undefined, modpackPage + 1)}
                     disabled={modpackPage >= Math.ceil(modpackTotalHits / PACK_PAGE_SIZE) - 1}
-                    className="px-4 py-2 bg-[#0b081a] border border-emerald-500/30 text-emerald-300 rounded-xl text-xs font-bold disabled:opacity-40 hover:border-cyan-400/50 transition-all">
+                    className="px-4 py-2 bg-surface border border-emerald-500/30 text-emerald-400 rounded-xl text-xs font-bold disabled:opacity-40 hover:border-line transition-all">
                     Sonraki →
                   </button>
                 </div>
@@ -2248,16 +2044,16 @@ export default function App() {
             <div className="max-w-6xl mx-auto space-y-5 animate-fadeIn">
               <div className="flex items-center justify-between flex-wrap gap-3">
                 <div>
-                  <h2 className="text-2xl font-black text-white flex items-center gap-2">✨ Shaderpack Merkezi</h2>
-                  <p className="text-xs text-slate-400">Oculus / Iris / OptiFine uyumlu gölgelendiriciler · Modrinth</p>
+                  <h2 className="text-2xl font-semibold text-ink flex items-center gap-2">✨ Shaderpack Merkezi</h2>
+                  <p className="text-xs text-ink-muted">Oculus / Iris / OptiFine uyumlu gölgelendiriciler · Modrinth</p>
                 </div>
-                <div className="flex items-center gap-2 bg-[#0d0a21] p-1 rounded-xl border border-purple-500/20">
+                <div className="flex items-center gap-2 bg-surface-2 p-1 rounded-xl border border-line">
                   <button onClick={() => { sfx.playClick(); setShaderSubTab("search"); }}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${shaderSubTab === "search" ? "bg-yellow-600 text-white shadow-md" : "text-slate-400 hover:text-white"}`}>
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${shaderSubTab === "search" ? "bg-accent text-ink shadow-md" : "text-ink-muted hover:text-ink"}`}>
                     🔍 Shader Keşfi
                   </button>
                   <button onClick={() => { sfx.playClick(); setShaderSubTab("installed"); }}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${shaderSubTab === "installed" ? "bg-yellow-600 text-white shadow-md" : "text-slate-400 hover:text-white"}`}>
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${shaderSubTab === "installed" ? "bg-accent text-ink shadow-md" : "text-ink-muted hover:text-ink"}`}>
                     ✨ Kurulu ({installedShaders.length})
                   </button>
                 </div>
@@ -2268,22 +2064,22 @@ export default function App() {
                   <form onSubmit={(e) => handleSearchShaders(e, 0)} className="space-y-3">
                     <div className="flex gap-3">
                       <div className="flex-1 relative">
-                        <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                        <Search className="w-4 h-4 text-ink-muted absolute left-3 top-3" />
                         <input type="text" value={shaderSearchQuery} onChange={(e) => setShaderSearchQuery(e.target.value)}
                           placeholder="Shader ara (örn: Complementary, BSL, MakeUp, Solas)..."
-                          className="w-full pl-9 pr-4 py-2.5 bg-[#0b081a]/80 border border-purple-500/20 rounded-xl text-xs text-white placeholder-slate-500 focus:border-yellow-400 outline-none" />
+                          className="w-full pl-9 pr-4 py-2.5 bg-surface/95 border border-line rounded-xl text-xs text-ink placeholder:text-ink-dim focus:border-accent outline-none" />
                       </div>
                       <button type="submit" disabled={isSearchingShaders}
-                        className="px-6 py-2.5 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold text-xs rounded-xl shadow-md transition-all">
+                        className="px-6 py-2.5 bg-accent hover:bg-accent-hover text-[#0a0b0d] font-bold text-xs rounded-xl shadow-md transition-all">
                         {isSearchingShaders ? "⏳ Aranıyor..." : "✨ Ara"}
                       </button>
                     </div>
                     <div className="flex gap-3">
                       <select value={shaderSortBy} onChange={(e) => setShaderSortBy(e.target.value as any)}
-                        className="px-3 py-2 bg-[#0b081a] border border-purple-500/20 rounded-xl text-xs text-slate-300 outline-none focus:border-yellow-400">
-                        <option value="downloads">⬇️ En Çok İndirilen</option>
+                        className="px-3 py-2 bg-surface border border-line rounded-xl text-xs text-ink outline-none focus:border-accent">
+                        <option value="downloads">️ En Çok İndirilen</option>
                         <option value="relevance">📊 İlgililik</option>
-                        <option value="follows">❤️ Takipçi</option>
+                        <option value="follows">️ Takipçi</option>
                         <option value="newest">🆕 En Yeni</option>
                         <option value="updated">🔄 Son Güncelleme</option>
                       </select>
@@ -2292,27 +2088,27 @@ export default function App() {
 
                   {shaderSearchResults.length === 0 && !isSearchingShaders && (
                     <div className="p-16 text-center space-y-3">
-                      <div className="text-5xl animate-blockBounce">✨</div>
-                      <p className="text-slate-400 text-sm font-bold">Shader aramak için yukarıdan arama yapın</p>
+                      <div className="w-12 h-12 mx-auto rounded-xl border border-line bg-surface-2 flex items-center justify-center"><Search className="w-5 h-5 text-ink-dim" /></div>
+                      <p className="text-ink-muted text-sm font-bold">Shader aramak için yukarıdan arama yapın</p>
                     </div>
                   )}
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {shaderSearchResults.map((shader) => (
                       <div key={shader.project_id}
-                        className="group p-5 rounded-2xl bg-[#0c081d]/80 border border-yellow-500/20 hover:border-yellow-400/50 transition-all flex gap-4 backdrop-blur-xl hover:shadow-[0_0_20px_rgba(234,179,8,0.15)] hover:scale-[1.01]">
+                        className="group p-5 rounded-2xl bg-surface/95 border border-yellow-500/20 hover:border-yellow-400/50 transition-all flex gap-4 hover:shadow-[0_0_20px_rgba(234,179,8,0.15)]">
                         {shader.icon_url ? (
                           <img src={shader.icon_url} alt={shader.title} className="w-14 h-14 rounded-xl object-cover shrink-0 border border-white/10" />
                         ) : (
-                          <div className="w-14 h-14 rounded-xl bg-yellow-950/60 border border-yellow-500/30 flex items-center justify-center text-2xl shrink-0">✨</div>
+                          <div className="w-14 h-14 rounded-xl bg-accent-soft/60 border border-yellow-500/30 flex items-center justify-center text-2xl shrink-0">✨</div>
                         )}
                         <div className="flex-1 min-w-0 space-y-1.5">
-                          <h4 className="text-sm font-bold text-white">{shader.title}</h4>
-                          <p className="text-[11px] text-slate-400 line-clamp-2">{shader.description}</p>
+                          <h4 className="text-sm font-bold text-ink">{shader.title}</h4>
+                          <p className="text-[11px] text-ink-muted line-clamp-2">{shader.description}</p>
                           <div className="flex items-center justify-between pt-1">
-                            <span className="text-[10px] font-mono text-yellow-400">⬇️ {(shader.downloads / 1000).toFixed(0)}k</span>
+                            <span className="text-[10px] font-mono text-accent">⬇️ {(shader.downloads / 1000).toFixed(0)}k</span>
                             <button onClick={() => openVersionSelector(shader, "shader")}
-                              className="px-4 py-1.5 bg-gradient-to-r from-yellow-500 to-amber-400 hover:from-yellow-400 hover:to-amber-300 text-slate-950 font-bold text-xs rounded-xl shadow-md transition-all hover:shadow-[0_0_12px_rgba(234,179,8,0.4)] active:scale-95">
+                              className="px-4 py-1.5 bg-accent hover:bg-accent-hover text-[#0a0b0d] font-bold text-xs rounded-xl shadow-md transition-all hover:shadow-[0_0_12px_rgba(234,179,8,0.4)]">
                               ⚡ Kur
                             </button>
                           </div>
@@ -2325,15 +2121,15 @@ export default function App() {
                   {shaderTotalHits > SHADER_PAGE_SIZE && (
                     <div className="flex items-center justify-center gap-4 pt-2">
                       <button onClick={() => handleSearchShaders(undefined, shaderPage - 1)} disabled={shaderPage === 0}
-                        className="px-4 py-2 bg-[#0b081a] border border-yellow-500/30 text-yellow-300 rounded-xl text-xs font-bold disabled:opacity-40 hover:border-yellow-400/50 transition-all">
+                        className="px-4 py-2 bg-surface border border-yellow-500/30 text-accent rounded-xl text-xs font-bold disabled:opacity-40 hover:border-yellow-400/50 transition-all">
                         ← Önceki
                       </button>
-                      <span className="text-xs text-slate-400 font-mono">
+                      <span className="text-xs text-ink-muted font-mono">
                         Sayfa {shaderPage + 1} / {Math.ceil(shaderTotalHits / SHADER_PAGE_SIZE)} · {shaderTotalHits} shader
                       </span>
                       <button onClick={() => handleSearchShaders(undefined, shaderPage + 1)}
                         disabled={shaderPage >= Math.ceil(shaderTotalHits / SHADER_PAGE_SIZE) - 1}
-                        className="px-4 py-2 bg-[#0b081a] border border-yellow-500/30 text-yellow-300 rounded-xl text-xs font-bold disabled:opacity-40 hover:border-yellow-400/50 transition-all">
+                        className="px-4 py-2 bg-surface border border-yellow-500/30 text-accent rounded-xl text-xs font-bold disabled:opacity-40 hover:border-yellow-400/50 transition-all">
                         Sonraki →
                       </button>
                     </div>
@@ -2346,15 +2142,15 @@ export default function App() {
                   {installedShaders.length === 0 ? (
                     <div className="p-12 text-center space-y-3">
                       <div className="text-4xl">🌅</div>
-                      <p className="text-slate-400 text-sm">Bu profilde kurulu shader yok</p>
+                      <p className="text-ink-muted text-sm">Bu profilde kurulu shader yok</p>
                     </div>
                   ) : installedShaders.map((name) => (
-                    <div key={name} className="p-4 rounded-xl bg-[#0b081a]/80 border border-yellow-500/20 hover:border-yellow-400/40 flex items-center justify-between text-xs font-mono transition-all">
+                    <div key={name} className="p-4 rounded-xl bg-surface/95 border border-yellow-500/20 hover:border-yellow-400/40 flex items-center justify-between text-xs font-mono transition-all">
                       <div className="flex items-center gap-3">
-                        <Sun className="w-4 h-4 text-yellow-400" />
-                        <span className="text-white font-bold">{name}</span>
+                        <Sun className="w-4 h-4 text-accent" />
+                        <span className="text-ink font-bold">{name}</span>
                       </div>
-                      <button onClick={() => handleDeleteShader(name)} className="p-1.5 text-slate-500 hover:text-red-400 transition-colors" title="Shader'ı Sil">
+                      <button onClick={() => handleDeleteShader(name)} className="p-1.5 text-ink-dim hover:text-red-400 transition-colors" title="Shader'ı Sil">
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
@@ -2369,13 +2165,13 @@ export default function App() {
             <div className="max-w-6xl mx-auto space-y-6 animate-fadeIn">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-black text-white">Canlı İndirme & Kurulum Takipçisi</h2>
-                  <p className="text-xs text-slate-400">İndirilen ve kurulan mod, modpack ve kütüphanelerin ilerlemesi.</p>
+                  <h2 className="text-2xl font-semibold text-ink">Canlı İndirme & Kurulum Takipçisi</h2>
+                  <p className="text-xs text-ink-muted">İndirilen ve kurulan mod, modpack ve kütüphanelerin ilerlemesi.</p>
                 </div>
                 {activeDownloads.length > 0 && (
                   <button
                     onClick={() => setActiveDownloads([])}
-                    className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs"
+                    className="px-3 py-1.5 bg-surface-3 hover:bg-surface-2 text-ink rounded-lg text-xs"
                   >
                     Listeyi Temizle
                   </button>
@@ -2383,7 +2179,7 @@ export default function App() {
               </div>
 
               {activeDownloads.length === 0 ? (
-                <div className="p-12 text-center text-slate-500 text-xs font-mono bg-black/20 rounded-2xl border border-white/5">
+                <div className="p-12 text-center text-ink-dim text-xs font-mono bg-black/20 rounded-2xl border border-white/5">
                   Şu anda aktif bir indirme işlemi bulunmuyor.
                 </div>
               ) : (
@@ -2391,26 +2187,26 @@ export default function App() {
                   {activeDownloads.map((item) => (
                     <div
                       key={item.id}
-                      className={`p-5 rounded-2xl border space-y-3 backdrop-blur-xl transition-all duration-300 ${
+                      className={`p-5 rounded-2xl border space-y-3 transition-all duration-300 ${
                         item.status === "completed"
                           ? "bg-emerald-950/30 border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.15)]"
                           : item.status === "failed"
                           ? "bg-red-950/30 border-red-500/30"
-                          : "bg-[#0c081d]/80 border-purple-500/20 shadow-[0_0_15px_rgba(168,85,247,0.1)]"
+                          : "bg-surface/95 border-line shadow-[0_0_15px_rgba(168,85,247,0.1)]"
                       }`}
                     >
                       {/* Başlık Satırı */}
                       <div className="flex items-center gap-3">
                         <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-base shrink-0 ${
-                          item.type === "modpack" ? "bg-purple-900/60" :
+                          item.type === "modpack" ? "bg-surface-3" :
                           item.type === "shader" ? "bg-amber-900/60" :
-                          item.type === "mod" ? "bg-cyan-900/60" : "bg-slate-800"
+                          item.type === "mod" ? "bg-cyan-900/60" : "bg-surface-3"
                         }`}>
                           {item.type === "modpack" ? "📦" : item.type === "shader" ? "✨" : item.type === "mod" ? "🧩" : "⚡"}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-bold text-white truncate">{item.title}</h4>
-                          <p className="text-[10px] text-slate-400 font-mono mt-0.5">{item.statusText}</p>
+                          <h4 className="text-sm font-bold text-ink truncate">{item.title}</h4>
+                          <p className="text-[10px] text-ink-muted font-mono mt-0.5">{item.statusText}</p>
                         </div>
                         <div className="text-right shrink-0">
                           {item.status === "completed" ? (
@@ -2418,7 +2214,7 @@ export default function App() {
                           ) : item.status === "failed" ? (
                             <span className="text-red-400 font-bold text-xs">✕ Hata</span>
                           ) : (
-                            <span className="text-cyan-300 font-mono text-xs animate-pulse">{item.speed}</span>
+                            <span className="text-accent font-mono text-xs animate-pulse">{item.speed}</span>
                           )}
                         </div>
                       </div>
@@ -2428,8 +2224,8 @@ export default function App() {
                         <div
                           className={`h-full transition-all duration-500 relative ${
                             item.status === "completed"
-                              ? "bg-gradient-to-r from-emerald-600 via-emerald-400 to-green-300"
-                              : "bg-gradient-to-r from-lime-500 via-emerald-400 to-green-300"
+                              ? "bg-accent"
+                              : "bg-accent"
                           }`}
                           style={{ width: `${Math.min(100, Math.max(0, item.progress))}%` }}
                         >
@@ -2455,46 +2251,44 @@ export default function App() {
           {activeTab === "accounts" && (
             <div className="max-w-4xl mx-auto space-y-6 animate-fadeIn">
               <div>
-                <h2 className="text-2xl font-black text-white flex items-center gap-2">
-                  <span>👤</span> Hesap Yönetimi
+                <h2 className="text-2xl font-semibold text-ink flex items-center gap-2">
+                  Hesap Yönetimi
                 </h2>
-                <p className="text-xs text-slate-400">Resmi Microsoft hesabı veya çevrimdışı (offline) oyuncu profili ile Minecraft oynayın.</p>
+                <p className="text-xs text-ink-muted">Resmi Microsoft hesabı veya çevrimdışı (offline) oyuncu profili ile Minecraft oynayın.</p>
               </div>
 
               {/* Microsoft Giriş Kartı */}
-              <div className="p-6 rounded-2xl bg-[#0c081d]/85 border border-purple-500/30 space-y-4 backdrop-blur-xl shadow-xl">
+              <div className="panel p-6 space-y-4">
                 <div className="flex items-center justify-between flex-wrap gap-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-2xl">
-                      🪟
-                    </div>
+                    <div className="w-10 h-10 rounded-lg bg-surface-3 border border-line flex items-center justify-center"><User className="w-4 h-4 text-ink-muted" /></div>
                     <div>
-                      <h3 className="text-base font-black text-white">Microsoft Hesabı ile Giriş</h3>
-                      <p className="text-xs text-slate-400">Resmi Minecraft sunucularına bağlanmak ve pelerinlerinizi kullanmak için bağlayın.</p>
+                      <h3 className="text-base font-semibold text-ink">Microsoft Hesabı ile Giriş</h3>
+                      <p className="text-xs text-ink-muted">Resmi Minecraft sunucularına bağlanmak ve pelerinlerinizi kullanmak için bağlayın.</p>
                     </div>
                   </div>
                   <button
                     onClick={handleStartMicrosoftLogin}
                     disabled={isStartingMsAuth}
-                    className="px-6 py-3 bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-400 hover:from-blue-500 hover:to-teal-300 text-slate-950 font-black text-xs rounded-xl shadow-lg shadow-cyan-500/30 transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+                    className="px-6 py-3 btn-accent disabled:opacity-50"
                   >
-                    {isStartingMsAuth ? "⏳ Bağlantı Açılıyor..." : "⚡ Microsoft ile Bağlan"}
+                    {isStartingMsAuth ? "Bağlantı Açılıyor..." : "Microsoft ile Bağlan"}
                   </button>
                 </div>
 
                 {deviceCodeInfo && (
-                  <div className="p-5 bg-cyan-950/50 border border-cyan-400/40 rounded-2xl space-y-4 text-xs font-mono shadow-[0_0_25px_rgba(34,211,238,0.15)] animate-fadeIn">
+                  <div className="p-5 bg-surface-2 border border-line rounded-xl space-y-4 text-xs animate-fadeIn">
                     <div className="flex items-center justify-between flex-wrap gap-2">
-                      <span className="text-cyan-300 font-bold text-sm">🔑 Adım 1: Kodunuz Hazır</span>
-                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold animate-pulse">
-                        ✓ Panoya Otomatik Kopyalandı
+                      <span className="text-accent font-bold text-sm">Adım 1 — Kodunuz hazır</span>
+                      <span className="chip chip-accent">
+                        Panoya kopyalandı
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between p-4 bg-black/60 rounded-xl border border-cyan-400/30">
+                    <div className="flex items-center justify-between p-4 bg-surface-3 rounded-xl border border-line">
                       <div>
-                        <p className="text-[10px] text-slate-400 uppercase tracking-wider">Doğrulama Kodu</p>
-                        <p className="text-2xl font-black text-yellow-300 tracking-widest mt-0.5 select-all">{deviceCodeInfo.user_code}</p>
+                        <p className="text-[10px] text-ink-muted uppercase tracking-wider">Doğrulama Kodu</p>
+                        <p className="text-2xl font-semibold text-accent tracking-widest mt-0.5 select-all">{deviceCodeInfo.user_code}</p>
                       </div>
                       <button
                         onClick={async () => {
@@ -2502,37 +2296,37 @@ export default function App() {
                           await navigator.clipboard.writeText(deviceCodeInfo.user_code);
                           alert("Kod panoya tekrar kopyalandı!");
                         }}
-                        className="px-4 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-bold text-xs transition-all"
+                        className="btn-ghost h-9 px-4 text-xs"
                       >
-                        📋 Kopyala
+                        Kopyala
                       </button>
                     </div>
 
                     <div className="space-y-2">
-                      <p className="text-slate-300 text-xs">
-                        👉 <strong>Adım 2:</strong> Tarayıcıda Microsoft giriş sayfasında yukarıdaki kodu yapıştırın ve onaylayın.
+                      <p className="text-ink text-xs">
+                        <strong>Adım 2:</strong> Tarayıcıda Microsoft giriş sayfasında yukarıdaki kodu yapıştırın ve onaylayın.
                       </p>
                       <button
                         onClick={() => {
                           sfx.playClick();
                           api.openInBrowser(deviceCodeInfo.verification_uri);
                         }}
-                        className="w-full py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black rounded-xl text-xs flex items-center justify-center gap-2 shadow-md transition-all hover:scale-[1.01]"
+                        className="w-full py-2.5 bg-accent hover:bg-accent-hover text-[#0a0b0d] font-semibold rounded-xl text-xs flex items-center justify-center gap-2 shadow-md transition-all"
                       >
-                        🌐 Tarayıcıda Doğrulama Sayfasını Aç ({deviceCodeInfo.verification_uri})
+                        Doğrulama sayfasını aç ({deviceCodeInfo.verification_uri})
                       </button>
                     </div>
 
-                    <div className="pt-2 border-t border-cyan-500/20 flex justify-between items-center text-[11px]">
-                      <span className="text-slate-400">Giriş yaptıktan sonra hesap otomatik algılanır.</span>
+                    <div className="pt-3 border-t border-line flex justify-between items-center text-[11px]">
+                      <span className="text-ink-muted">Giriş yaptıktan sonra hesap otomatik algılanır.</span>
                       <button
                         onClick={() => {
                           sfx.playClick();
                           handleRefreshAccounts();
                         }}
-                        className="text-cyan-400 hover:text-cyan-300 font-bold underline"
+                        className="text-accent hover:text-accent-hover font-medium"
                       >
-                        🔄 Hesap Listesini Yenile
+                        Listeyi yenile
                       </button>
                     </div>
                   </div>
@@ -2540,14 +2334,12 @@ export default function App() {
               </div>
 
               {/* Çevrimdışı Hesap Ekleme */}
-              <div className="p-6 rounded-2xl bg-[#0c081d]/80 border border-purple-500/20 space-y-4 backdrop-blur-xl">
+              <div className="p-6 rounded-2xl bg-surface/95 border border-line space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-xl">
-                    🌿
-                  </div>
+                  <div className="w-9 h-9 rounded-lg bg-accent-soft border border-line flex items-center justify-center"><Plus className="w-4 h-4 text-accent" /></div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">Çevrimdışı (Offline) Oyuncu Ekle</h3>
-                    <p className="text-xs text-slate-400">İnternet bağlantısı olmadan yerel veya LAN oyunları oynamak için oyuncu adı belirleyin.</p>
+                    <h3 className="text-sm font-bold text-ink">Çevrimdışı (Offline) Oyuncu Ekle</h3>
+                    <p className="text-xs text-ink-muted">İnternet bağlantısı olmadan yerel veya LAN oyunları oynamak için oyuncu adı belirleyin.</p>
                   </div>
                 </div>
                 <form onSubmit={handleAddOfflineAccount} className="flex gap-3">
@@ -2556,11 +2348,11 @@ export default function App() {
                     value={newOfflineUsername}
                     onChange={(e) => setNewOfflineUsername(e.target.value)}
                     placeholder="Oyuncu adı (örn: Enes, ProCraft, Steve)..."
-                    className="flex-1 px-4 py-2.5 bg-[#090616] border border-purple-500/20 rounded-xl text-xs text-white placeholder-slate-500 focus:border-cyan-400 outline-none"
+                    className="flex-1 h-10 px-3 bg-surface-2 border border-line rounded-lg text-[13px] text-ink placeholder:text-ink-dim focus:border-accent outline-none transition-colors"
                   />
                   <button
                     type="submit"
-                    className="px-6 py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-xl shadow-md transition-all hover:scale-105 active:scale-95"
+                    className="btn-accent h-10 px-5"
                   >
                     + Oyuncu Ekle
                   </button>
@@ -2569,30 +2361,28 @@ export default function App() {
 
               {/* Hesap Listesi */}
               <div className="space-y-3">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Kayıtlı Oyuncu Profilleri ({accounts.length})</h3>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-ink-muted">Kayıtlı Oyuncu Profilleri ({accounts.length})</h3>
                 {accounts.map((acc) => (
                   <div
                     key={acc.id}
-                    className={`p-4 rounded-2xl border flex items-center justify-between text-xs font-mono transition-all backdrop-blur-xl ${acc.is_active
-                        ? "bg-purple-950/50 border-cyan-400/60 shadow-[0_0_20px_rgba(34,211,238,0.2)]"
-                        : "bg-[#0b081a]/70 border-purple-500/20 hover:border-purple-500/40"
+                    className={`p-4 rounded-2xl border flex items-center justify-between text-xs font-mono transition-all ${acc.is_active
+                        ? "bg-accent-soft border-accent/40"
+                        : "bg-surface/90 border-line hover:border-line"
                       }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-cyan-500 flex items-center justify-center font-black text-sm text-white shadow-md">
+                      <div className="w-10 h-10 rounded-xl bg-accent-soft flex items-center justify-center font-semibold text-sm text-accent">
                         {acc.username.substring(0, 1).toUpperCase()}
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <p className="text-white font-black text-sm">{acc.username}</p>
+                          <p className="text-ink font-semibold text-sm">{acc.username}</p>
                           {acc.is_active && (
-                            <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 text-[10px] font-bold">
-                              AKTİF HESAP
-                            </span>
+                            <span className="chip chip-accent">Aktif hesap</span>
                           )}
                         </div>
-                        <p className="text-[10px] text-slate-400 font-mono mt-0.5">
-                          {acc.account_type === "microsoft" ? "🌐 Microsoft Çevrimiçi" : "🌿 Çevrimdışı Oyuncu"} · UUID: {acc.uuid.substring(0, 8)}...
+                        <p className="text-[10px] text-ink-muted font-mono mt-0.5">
+                          {acc.account_type === "microsoft" ? "🌐 Microsoft Çevrimiçi" : " Çevrimdışı Oyuncu"} · UUID: {acc.uuid.substring(0, 8)}...
                         </p>
                       </div>
                     </div>
@@ -2601,14 +2391,14 @@ export default function App() {
                       {!acc.is_active && (
                         <button
                           onClick={() => handleSetActiveAccount(acc.id)}
-                          className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold transition-all"
+                          className="px-4 py-2 bg-surface-3 hover:bg-surface-2 text-ink rounded-xl text-xs font-bold transition-all"
                         >
                           Seç
                         </button>
                       )}
                       <button
                         onClick={() => handleDeleteAccount(acc.id)}
-                        className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-colors"
+                        className="p-2 text-ink-dim hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-colors"
                         title="Hesabı Sil"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -2625,13 +2415,13 @@ export default function App() {
             <div className="max-w-5xl mx-auto space-y-6 animate-fadeIn">
               <div className="flex items-center justify-between flex-wrap gap-4">
                 <div>
-                  <h2 className="text-2xl font-black text-white flex items-center gap-2">
-                    <Terminal className="w-6 h-6 text-fuchsia-400" />
+                  <h2 className="text-2xl font-semibold text-ink flex items-center gap-2">
+                    <Terminal className="w-6 h-6 text-accent" />
                     <span>AI Log & Canlı Teşhis Asistanı</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/40 font-mono">11+ Hata Motoru</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent-soft text-accent border border-line font-mono">11+ Hata Motoru</span>
                   </h2>
-                  <p className="text-xs text-slate-400">
-                    Profil: <strong className="text-cyan-300">{selectedInstance?.name || "Seçilmedi"}</strong> · Oyun çöktüğünde veya açılmadığında hatayı saniyeler içinde tespit eder ve Türkçe çözüm sunar.
+                  <p className="text-xs text-ink-muted">
+                    Profil: <strong className="text-accent">{selectedInstance?.name || "Seçilmedi"}</strong> · Oyun çöktüğünde veya açılmadığında hatayı saniyeler içinde tespit eder ve Türkçe çözüm sunar.
                   </p>
                 </div>
 
@@ -2640,7 +2430,7 @@ export default function App() {
                   <button
                     onClick={handleFetchInstanceLatestLog}
                     disabled={isLoadingLogFile}
-                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-fuchsia-600 via-purple-600 to-cyan-600 hover:from-fuchsia-500 hover:to-cyan-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-fuchsia-600/30 transition-all hover:scale-105 active:scale-95"
+                    className="px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-[#0a0b0d] font-bold text-xs flex items-center gap-2 shadow-lg shadow-fuchsia-600/30 transition-all"
                   >
                     <Activity className={`w-4 h-4 ${isLoadingLogFile ? "animate-spin" : ""}`} />
                     <span>{isLoadingLogFile ? "Log Çekiliyor..." : "⚡ Aktif Profil Logunu Çek"}</span>
@@ -2649,8 +2439,8 @@ export default function App() {
               </div>
 
               {/* Hızlı Test Örnekleri (Kullanıcının tek tıkla denemesi için) */}
-              <div className="p-4 rounded-2xl bg-[#0d0922]/80 border border-purple-500/20 backdrop-blur-xl space-y-2">
-                <p className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+              <div className="p-4 rounded-2xl bg-surface/90 border border-line space-y-2">
+                <p className="text-xs font-bold text-ink flex items-center gap-1.5">
                   <span>🧪</span>
                   <span>Hızlı Teşhis Test Örnekleri (Tek Tıkla Dene):</span>
                 </p>
@@ -2678,7 +2468,7 @@ export default function App() {
                           setIsAnalyzingLog(false);
                         }
                       }}
-                      className="px-3 py-1.5 rounded-lg bg-purple-950/40 hover:bg-purple-900/60 border border-purple-500/30 text-[11px] font-mono text-purple-200 hover:text-white transition-all hover:scale-105 active:scale-95"
+                      className="px-3 py-1.5 rounded-lg bg-surface-2 hover:bg-surface-3 border border-line text-[11px] font-mono text-ink hover:text-ink transition-all"
                     >
                       {sample.label}
                     </button>
@@ -2689,7 +2479,7 @@ export default function App() {
               {/* Teşhis Kartı (AI Analiz Sonucu) */}
               {crashDiagnosis && (
                 <div
-                  className={`p-6 rounded-2xl border backdrop-blur-xl space-y-4 shadow-2xl transition-all animate-fadeIn ${crashDiagnosis.severity === "critical"
+                  className={`p-6 rounded-2xl border space-y-4 transition-all animate-fadeIn ${crashDiagnosis.severity === "critical"
                       ? "bg-red-950/70 border-red-500/60 shadow-[0_0_30px_rgba(239,68,68,0.25)]"
                       : crashDiagnosis.severity === "high"
                         ? "bg-amber-950/70 border-amber-500/60 shadow-[0_0_30px_rgba(245,158,11,0.25)]"
@@ -2702,35 +2492,35 @@ export default function App() {
                         {crashDiagnosis.severity === "critical" ? "🚨" : crashDiagnosis.severity === "high" ? "⚠️" : "🔍"}
                       </div>
                       <div>
-                        <h3 className="text-lg font-black text-white">{crashDiagnosis.title}</h3>
-                        <p className="text-[11px] text-slate-400 font-mono">EnesLauncher AI Teşhis Raporu</p>
+                        <h3 className="text-lg font-semibold text-ink">{crashDiagnosis.title}</h3>
+                        <p className="text-[11px] text-ink-muted font-mono">EnesLauncher AI Teşhis Raporu</p>
                       </div>
                     </div>
-                    <span className={`text-xs font-mono font-black uppercase px-3 py-1 rounded-full border ${
+                    <span className={`text-xs font-mono font-semibold uppercase px-3 py-1 rounded-full border ${
                       crashDiagnosis.severity === "critical"
                         ? "bg-red-900/50 border-red-400 text-red-200"
                         : crashDiagnosis.severity === "high"
                           ? "bg-amber-900/50 border-amber-400 text-amber-200"
-                          : "bg-purple-900/50 border-purple-400 text-purple-200"
+                          : "bg-purple-900/50 border-purple-400 text-ink"
                     }`}>
                       Ciddiyet: {crashDiagnosis.severity.toUpperCase()}
                     </span>
                   </div>
 
                   <div className="space-y-3 text-xs font-mono bg-black/40 p-4 rounded-xl border border-white/5">
-                    <p className="text-slate-300">
-                      <strong className="text-cyan-300">🔍 Tespit Edilen Neden:</strong> {crashDiagnosis.cause}
+                    <p className="text-ink">
+                      <strong className="text-accent">🔍 Tespit Edilen Neden:</strong> {crashDiagnosis.cause}
                     </p>
                     {crashDiagnosis.faulty_mod && (
                       <p className="text-red-300 flex items-center gap-2">
-                        <strong className="text-white">💣 Şüpheli / Hatalı Mod:</strong>
+                        <strong className="text-ink">💣 Şüpheli / Hatalı Mod:</strong>
                         <span className="px-2 py-0.5 rounded bg-red-900/60 text-red-200 font-bold border border-red-500/40">
                           {crashDiagnosis.faulty_mod}
                         </span>
                       </p>
                     )}
                     <div className="p-4 bg-emerald-950/60 rounded-xl border border-emerald-500/40 text-emerald-200 space-y-1">
-                      <strong className="text-emerald-300 text-sm flex items-center gap-1.5">
+                      <strong className="text-emerald-400 text-sm flex items-center gap-1.5">
                         <span>💡</span>
                         <span>AI Çözüm Tavsiyesi:</span>
                       </strong>
@@ -2742,7 +2532,7 @@ export default function App() {
 
               {/* Log Giriş Alanı */}
               <div className="space-y-3">
-                <div className="flex items-center justify-between text-xs text-slate-400">
+                <div className="flex items-center justify-between text-xs text-ink-muted">
                   <span>Minecraft Crash veya Latest Log İçeriği:</span>
                   {crashLogInput && (
                     <button
@@ -2758,12 +2548,12 @@ export default function App() {
                   onChange={(e) => setCrashLogInput(e.target.value)}
                   placeholder="Crash logunu buraya yapıştırın veya yukarıdaki 'Aktif Profil Logunu Çek' butonuna tıklayın..."
                   rows={12}
-                  className="w-full p-4 bg-[#090616]/90 border border-purple-500/30 rounded-2xl text-xs font-mono text-slate-300 placeholder-slate-600 focus:border-cyan-400 outline-none shadow-inner"
+                  className="w-full p-4 bg-surface-2/95 border border-line rounded-2xl text-xs font-mono text-ink placeholder-slate-600 focus:border-accent outline-none shadow-inner"
                 />
                 <button
                   onClick={handleAnalyzeLog}
                   disabled={isAnalyzingLog || !crashLogInput.trim()}
-                  className="px-8 py-3 bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-500 hover:to-purple-500 text-white font-black text-xs rounded-xl shadow-lg shadow-fuchsia-600/30 transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+                  className="px-8 py-3 bg-accent hover:bg-accent-hover text-[#0a0b0d] font-semibold text-xs rounded-xl shadow-lg shadow-fuchsia-600/30 transition-all disabled:opacity-50"
                 >
                   {isAnalyzingLog ? "⏳ AI Logu İnceliyor..." : "🤖 Yapay Zeka ile Logu Analiz Et"}
                 </button>
@@ -2775,19 +2565,19 @@ export default function App() {
           {activeTab === "settings" && (
             <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn">
               <div>
-                <h2 className="text-2xl font-black text-white">Ayarlar, Temalar & Özelleştirme</h2>
-                <p className="text-xs text-slate-400">
+                <h2 className="page-title">Ayarlar, Temalar & Özelleştirme</h2>
+                <p className="text-xs text-ink-muted">
                   Uygulama arka planını (video, fotoğraf, müzik), renk paletini ve ses efektlerini özelleştirin.
                 </p>
               </div>
 
               {/* 1. Tema Renk Paleti */}
-              <div className="p-6 rounded-2xl bg-[#0c081d]/80 border border-purple-500/20 space-y-4 backdrop-blur-xl">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Palette className="w-4 h-4 text-purple-400" />
+              <div className="p-6 rounded-2xl bg-surface/95 border border-line space-y-4">
+                <h3 className="text-[13px] font-semibold text-ink flex items-center gap-2">
+                  <Palette className="w-4 h-4 text-accent" />
                   <span>Renk Paleti & Temalar</span>
                 </h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5">
                   {(Object.keys(themeStyles) as ThemePreset[]).map((tKey) => {
                     const t = themeStyles[tKey];
                     const isSelected = bgSettings.presetTheme === tKey;
@@ -2798,14 +2588,24 @@ export default function App() {
                           sfx.playClick();
                           setBgSettings((prev) => ({ ...prev, presetTheme: tKey }));
                         }}
-                        className={`p-4 rounded-xl border text-left transition-all ${isSelected
-                            ? "bg-purple-950/60 border-cyan-400 shadow-md"
-                            : "bg-[#090616]/60 border-white/5 hover:border-white/20"
-                          }`}
+                        className={`flex items-center gap-3 p-3 rounded-lg border text-left transition-colors ${
+                          isSelected
+                            ? "border-accent bg-accent-soft"
+                            : "border-line bg-surface-2 hover:border-line-strong"
+                        }`}
                       >
-                        <div className={`w-full h-3 rounded-md bg-gradient-to-r ${t.primary} mb-2`} />
-                        <p className="text-xs font-bold text-white truncate">{t.name.split(" ")[0]}</p>
-                        <p className="text-[10px] text-slate-400">{tKey}</p>
+                        <span
+                          className={`w-6 h-6 rounded-full bg-gradient-to-br ${t.primary} ring-1 ring-inset ring-white/15 shrink-0`}
+                        />
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-[12px] font-medium text-ink truncate">
+                            {t.name}
+                          </span>
+                          <span className="block text-[11px] text-ink-dim capitalize">
+                            {tKey}
+                          </span>
+                        </span>
+                        {isSelected && <Check className="w-3.5 h-3.5 text-accent shrink-0" />}
                       </button>
                     );
                   })}
@@ -2813,9 +2613,9 @@ export default function App() {
               </div>
 
               {/* 2. Arka Plan Türü (Video / Fotoğraf / Parçacık) */}
-              <div className="p-6 rounded-2xl bg-[#0c081d]/80 border border-purple-500/20 space-y-5 backdrop-blur-xl">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <ImageIcon className="w-4 h-4 text-cyan-400" />
+              <div className="p-6 rounded-2xl bg-surface/95 border border-line space-y-5">
+                <h3 className="text-[13px] font-semibold text-ink flex items-center gap-2">
+                  <ImageIcon className="w-4 h-4 text-accent" />
                   <span>Uygulama Arka Planı (Video / Fotoğraf)</span>
                 </h3>
 
@@ -2826,8 +2626,8 @@ export default function App() {
                       setBgSettings((prev) => ({ ...prev, type: "particles" }));
                     }}
                     className={`flex-1 py-2 rounded-xl text-xs font-bold border transition-all ${bgSettings.type === "particles"
-                        ? "bg-cyan-500 text-slate-950 border-cyan-400"
-                        : "bg-slate-900 border-white/10 text-slate-300"
+                        ? "bg-accent text-[#0a0b0d] border-line"
+                        : "bg-surface-2 border-white/10 text-ink"
                       }`}
                   >
                     Dinamik Parçacıklar
@@ -2838,8 +2638,8 @@ export default function App() {
                       setBgSettings((prev) => ({ ...prev, type: "custom_image" }));
                     }}
                     className={`flex-1 py-2 rounded-xl text-xs font-bold border transition-all ${bgSettings.type === "custom_image"
-                        ? "bg-cyan-500 text-slate-950 border-cyan-400"
-                        : "bg-slate-900 border-white/10 text-slate-300"
+                        ? "bg-accent text-[#0a0b0d] border-line"
+                        : "bg-surface-2 border-white/10 text-ink"
                       }`}
                   >
                     Özel Fotoğraf / Resim
@@ -2850,8 +2650,8 @@ export default function App() {
                       setBgSettings((prev) => ({ ...prev, type: "custom_video" }));
                     }}
                     className={`flex-1 py-2 rounded-xl text-xs font-bold border transition-all ${bgSettings.type === "custom_video"
-                        ? "bg-cyan-500 text-slate-950 border-cyan-400"
-                        : "bg-slate-900 border-white/10 text-slate-300"
+                        ? "bg-accent text-[#0a0b0d] border-line"
+                        : "bg-surface-2 border-white/10 text-ink"
                       }`}
                   >
                     Özel Video Arka Plan
@@ -2860,14 +2660,14 @@ export default function App() {
 
                 {bgSettings.type === "custom_image" && (
                   <div className="space-y-3">
-                    <label className="text-xs text-slate-400 font-mono">Arka Plan Resmi Seç (Bilgisayardan):</label>
+                    <label className="text-xs text-ink-muted font-mono">Arka Plan Resmi Seç (Bilgisayardan):</label>
                     <div className="flex flex-col gap-2">
                       <label
                         htmlFor="bg-image-picker"
-                        className="flex items-center gap-2 px-4 py-3 bg-[#090616] border border-dashed border-purple-500/50 hover:border-cyan-400/70 rounded-xl text-xs text-slate-300 cursor-pointer transition-all hover:bg-purple-950/30"
+                        className="flex items-center gap-2 px-4 py-3 bg-surface-2 border border-dashed border-line hover:border-accent/60 rounded-xl text-xs text-ink cursor-pointer transition-all hover:bg-white/[0.04]"
                         onClick={() => sfx.playClick()}
                       >
-                        <ImageIcon className="w-4 h-4 text-cyan-400" />
+                        <ImageIcon className="w-4 h-4 text-accent" />
                         <span>
                           {bgSettings.customImageUrl
                             ? "✓ " + bgSettings.customImageUrl.split(/[\\/]/).pop()
@@ -2931,14 +2731,14 @@ export default function App() {
 
                 {bgSettings.type === "custom_video" && (
                   <div className="space-y-3">
-                    <label className="text-xs text-slate-400 font-mono">Arka Plan Videosu Seç (Bilgisayardan):</label>
+                    <label className="text-xs text-ink-muted font-mono">Arka Plan Videosu Seç (Bilgisayardan):</label>
                     <div className="flex flex-col gap-2">
                       <label
                         htmlFor="bg-video-picker"
-                        className="flex items-center gap-2 px-4 py-3 bg-[#090616] border border-dashed border-purple-500/50 hover:border-cyan-400/70 rounded-xl text-xs text-slate-300 cursor-pointer transition-all hover:bg-purple-950/30"
+                        className="flex items-center gap-2 px-4 py-3 bg-surface-2 border border-dashed border-line hover:border-accent/60 rounded-xl text-xs text-ink cursor-pointer transition-all hover:bg-white/[0.04]"
                         onClick={() => sfx.playClick()}
                       >
-                        <Activity className="w-4 h-4 text-purple-400" />
+                        <Activity className="w-4 h-4 text-accent" />
                         <span>
                           {bgSettings.customVideoUrl
                             ? "✓ " + bgSettings.customVideoUrl.split(/[\\/]/).pop()
@@ -3001,43 +2801,43 @@ export default function App() {
                 )}
 
                 <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-slate-300">Yüzen Minecraft Parçacıkları:</span>
+                  <span className="text-xs text-ink">Yüzen Minecraft Parçacıkları:</span>
                   <input
                     type="checkbox"
                     checked={bgSettings.particlesEnabled}
                     onChange={(e) => setBgSettings((prev) => ({ ...prev, particlesEnabled: e.target.checked }))}
-                    className="w-4 h-4 accent-purple-500 cursor-pointer"
+                    className="w-4 h-4 accent-accent cursor-pointer"
                   />
                 </div>
               </div>
 
               {/* 3. Müzik & SFX Ayarları */}
-              <div className="p-6 rounded-2xl bg-[#0c081d]/80 border border-purple-500/20 space-y-4 backdrop-blur-xl">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+              <div className="p-6 rounded-2xl bg-surface/95 border border-line space-y-4">
+                <h3 className="text-[13px] font-semibold text-ink flex items-center gap-2">
                   <Music className="w-4 h-4 text-emerald-400" />
                   <span>Arka Plan Müziği & Ses Efektleri (SFX)</span>
                 </h3>
 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-slate-300">Arka Plan Müziği (BGM):</span>
+                    <span className="text-xs text-ink">Arka Plan Müziği (BGM):</span>
                     <button
                       onClick={() => {
                         sfx.playClick();
                         bgm.togglePlay();
                       }}
-                      className="px-4 py-1.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-xs font-bold"
+                      className="px-4 py-1.5 bg-accent hover:bg-accent-hover text-[#0a0b0d] rounded-lg text-xs font-bold"
                     >
                       {isBgmPlaying ? "Müziği Durdur" : "Müziği Başlat"}
                     </button>
                   </div>
 
                   <div>
-                    <label className="text-xs text-slate-400 font-mono">Özel Müzik Dosyası Seç:</label>
+                    <label className="text-xs text-ink-muted font-mono">Özel Müzik Dosyası Seç:</label>
                     <div className="mt-1 flex flex-col gap-2">
                       <label
                         htmlFor="bgm-file-picker"
-                        className="flex items-center gap-2 px-4 py-3 bg-[#090616] border border-dashed border-purple-500/50 hover:border-cyan-400/70 rounded-xl text-xs text-slate-300 cursor-pointer transition-all hover:bg-purple-950/30"
+                        className="flex items-center gap-2 px-4 py-3 bg-surface-2 border border-dashed border-line hover:border-accent/60 rounded-xl text-xs text-ink cursor-pointer transition-all hover:bg-white/[0.04]"
                         onClick={() => sfx.playClick()}
                       >
                         <Music className="w-4 h-4 text-emerald-400" />
@@ -3079,27 +2879,27 @@ export default function App() {
                   </div>
 
                   <div>
-                    <label className="text-xs text-slate-400 font-mono">Veya URL girin (.mp3):</label>
+                    <label className="text-xs text-ink-muted font-mono">Veya URL girin (.mp3):</label>
                     <input
                       type="text"
                       value={bgm.getCustomUrl()}
                       onChange={(e) => bgm.setCustomUrl(e.target.value)}
                       placeholder="Boş bırakılırsa varsayılan Minecraft ambient çalar..."
-                      className="w-full mt-1 p-2 bg-[#090616] border border-purple-500/20 rounded-xl text-xs text-white"
+                      className="w-full mt-1 p-2 bg-surface-2 border border-line rounded-xl text-xs text-ink"
                     />
                   </div>
                 </div>
               </div>
 
               {/* VIP Yapımcı Kartı */}
-              <div className="p-6 rounded-2xl bg-gradient-to-r from-purple-950/60 via-[#0d071a] to-cyan-950/40 border border-purple-500/30 flex items-center justify-between backdrop-blur-xl">
+              <div className="p-6 rounded-2xl bg-surface-2 border border-line flex items-center justify-between">
                 <div>
-                  <h4 className="text-sm font-black text-white">Enes Talha Elcan</h4>
-                  <p className="text-xs text-slate-400 font-mono">EnesLauncher Baş Geliştiricisi & Tasarımcısı</p>
+                  <h4 className="text-sm font-semibold text-ink">Enes Talha Elcan</h4>
+                  <p className="text-xs text-ink-muted font-mono">EnesLauncher Baş Geliştiricisi & Tasarımcısı</p>
                 </div>
                 <button
                   onClick={copyInstagramHandle}
-                  className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-xs rounded-xl flex items-center gap-2 shadow-lg"
+                  className="px-4 py-2 bg-accent hover:bg-accent-hover text-[#0a0b0d] font-bold text-xs rounded-xl flex items-center gap-2 shadow-lg"
                 >
                   <Instagram className="w-4 h-4" />
                   <span>@55_eness → Aç</span>
@@ -3113,14 +2913,14 @@ export default function App() {
       {/* ── CANLI İNDİRME FLOATING PANELİ ─ Sağ Alt (Minecraft Temalı XP HUD) ────── */}
       {activeDownloads.filter(d => d.status === "downloading" || d.status === "extracting" || d.status === "completed").length > 0 && (
         <div className="fixed bottom-6 right-6 z-40 w-96 space-y-3 pointer-events-auto animate-fadeIn">
-          <div className="flex items-center justify-between px-2 py-1 bg-black/60 rounded-xl border border-emerald-500/30 backdrop-blur-xl">
+          <div className="flex items-center justify-between px-2 py-1 bg-black/60 rounded-xl border border-emerald-500/30">
             <div className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full bg-lime-400 animate-ping shadow-[0_0_8px_#84cc16]" />
-              <span className="text-[11px] font-black text-lime-400 tracking-wider">MINECRAFT İNDİRME MERKEZİ</span>
+              <div className="w-2.5 h-2.5 rounded-full bg-lime-400 shadow-[0_0_8px_#84cc16]" />
+              <span className="text-[11px] font-semibold text-lime-400 tracking-wider">MINECRAFT İNDİRME MERKEZİ</span>
             </div>
             <button
               onClick={() => setActiveDownloads(prev => prev.filter(d => d.status === "downloading" || d.status === "extracting"))}
-              className="text-[10px] text-slate-400 hover:text-white"
+              className="text-[10px] text-ink-muted hover:text-ink"
             >
               Temizle
             </button>
@@ -3129,7 +2929,7 @@ export default function App() {
           {activeDownloads.filter(d => d.status === "downloading" || d.status === "extracting" || d.status === "completed").slice(0, 3).map(item => (
             <div
               key={item.id}
-              className={`p-4 rounded-2xl border-2 backdrop-blur-2xl transition-all duration-300 shadow-2xl space-y-2.5 ${
+              className={`p-4 rounded-2xl border-2 transition-all duration-300 space-y-2.5 ${
                 item.status === "completed"
                   ? "bg-[#06180e]/95 border-emerald-400/80 shadow-[0_0_30px_rgba(16,185,129,0.4)]"
                   : item.status === "failed"
@@ -3141,8 +2941,8 @@ export default function App() {
                 <span className="text-xl shrink-0">
                   {item.status === "completed" ? "✅" : item.type === "modpack" ? "📦" : item.type === "shader" ? "✨" : item.type === "mod" ? "🧩" : "⚡"}
                 </span>
-                <span className="text-xs font-black text-white truncate flex-1">{item.title}</span>
-                <span className="text-[10px] font-mono font-bold text-cyan-300 shrink-0 bg-cyan-950/80 px-2 py-0.5 rounded-lg border border-cyan-500/30 animate-pulse">
+                <span className="text-xs font-semibold text-ink truncate flex-1">{item.title}</span>
+                <span className="text-[10px] font-mono font-bold text-accent shrink-0 bg-cyan-950/80 px-2 py-0.5 rounded-lg border border-line animate-pulse">
                   {item.speed}
                 </span>
               </div>
@@ -3157,7 +2957,7 @@ export default function App() {
                   }}
                 />
                 <div
-                  className="h-full bg-gradient-to-r from-lime-500 via-emerald-400 to-green-300 transition-all duration-300 relative shadow-[0_0_15px_#10b981]"
+                  className="h-full bg-accent transition-all duration-300 relative"
                   style={{ width: `${Math.min(100, item.progress)}%` }}
                 >
                   <div className="absolute inset-0 bg-white/30 animate-pulse" />
@@ -3166,14 +2966,14 @@ export default function App() {
 
               {/* İndirme İstatistikleri: MB İndi / Kalan / Hız / Kalan Süre */}
               <div className="space-y-1 font-mono text-[10px]">
-                <div className="flex items-center justify-between text-slate-300 font-bold">
+                <div className="flex items-center justify-between text-ink font-bold">
                   <span className="truncate max-w-[180px]">{item.statusText}</span>
-                  <span className="text-lime-400 font-black tracking-wider text-xs">%{Math.round(item.progress)}</span>
+                  <span className="text-lime-400 font-semibold tracking-wider text-xs">%{Math.round(item.progress)}</span>
                 </div>
                 {item.totalBytes && item.totalBytes > 0 && (
-                  <div className="flex items-center justify-between text-slate-400 pt-0.5 border-t border-white/5">
+                  <div className="flex items-center justify-between text-ink-muted pt-0.5 border-t border-white/5">
                     <span>
-                      <strong className="text-cyan-300">{((item.bytesDownloaded || 0) / (1024 * 1024)).toFixed(1)} MB</strong>
+                      <strong className="text-accent">{((item.bytesDownloaded || 0) / (1024 * 1024)).toFixed(1)} MB</strong>
                       {" / "}{(item.totalBytes / (1024 * 1024)).toFixed(1)} MB
                     </span>
                     <span className="text-amber-300 font-bold">
@@ -3182,8 +2982,8 @@ export default function App() {
                   </div>
                 )}
                 {item.status === "downloading" && item.eta && (
-                  <div className="flex items-center justify-between text-[9px] text-slate-400">
-                    <span>⚡ Hız: <strong className="text-cyan-400">{item.speed}</strong></span>
+                  <div className="flex items-center justify-between text-[9px] text-ink-muted">
+                    <span>⚡ Hız: <strong className="text-accent">{item.speed}</strong></span>
                     <span className="text-emerald-400 font-bold">⏱️ Kalan: {item.eta}</span>
                   </div>
                 )}
@@ -3195,10 +2995,10 @@ export default function App() {
 
       {/* ── MODAL: SÜRÜM & LOADER SEÇİCİ (MOD / MODPACK / SHADER) ───────── */}
       {versionModal && versionModal.isOpen && (
-        <div className="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fadeIn">
-          <div className="bg-[#0c081e] border-2 border-purple-500/40 rounded-3xl p-6 w-full max-w-2xl shadow-[0_0_50px_rgba(168,85,247,0.35)] space-y-4 max-h-[88vh] flex flex-col">
+        <div className="fixed inset-0 bg-black/85 flex items-center justify-center z-50 p-4 animate-fadeIn">
+          <div className="bg-surface border-2 border-line rounded-2xl p-6 w-full max-w-2xl shadow-[0_0_50px_rgba(168,85,247,0.35)] space-y-4 max-h-[88vh] flex flex-col">
             {/* Modal Header */}
-            <div className="flex items-start justify-between gap-4 pb-3 border-b border-purple-500/20">
+            <div className="flex items-start justify-between gap-4 pb-3 border-b border-line">
               <div className="flex items-center gap-3">
                 {versionModal.project.icon_url ? (
                   <img
@@ -3207,34 +3007,34 @@ export default function App() {
                     className="w-14 h-14 rounded-2xl object-cover shrink-0 border border-white/10 shadow-lg"
                   />
                 ) : (
-                  <div className="w-14 h-14 rounded-2xl bg-purple-900/60 border border-purple-500/40 flex items-center justify-center text-3xl shrink-0">
+                  <div className="w-14 h-14 rounded-2xl bg-surface-3 border border-line flex items-center justify-center text-3xl shrink-0">
                     {versionModal.type === "modpack" ? "📦" : versionModal.type === "shader" ? "✨" : "🧩"}
                   </div>
                 )}
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-black text-white">{versionModal.project.title}</h3>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-950 text-purple-300 border border-purple-500/30 uppercase font-mono">
+                    <h3 className="text-lg font-semibold text-ink">{versionModal.project.title}</h3>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-950 text-ink-muted border border-line uppercase font-mono">
                       {versionModal.type.toUpperCase()}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-400 mt-0.5 line-clamp-1">{versionModal.project.description}</p>
-                  <p className="text-[11px] text-cyan-400 font-mono mt-1">
-                    🎯 Seçili Hedef Profil: <strong className="text-white">{selectedInstance?.name || "Profil Seçilmedi"}</strong> (MC {selectedInstance?.minecraft_version} · {selectedInstance?.loader_type.toUpperCase()})
+                  <p className="text-xs text-ink-muted mt-0.5 line-clamp-1">{versionModal.project.description}</p>
+                  <p className="text-[11px] text-accent font-mono mt-1">
+                    🎯 Seçili Hedef Profil: <strong className="text-ink">{selectedInstance?.name || "Profil Seçilmedi"}</strong> (MC {selectedInstance?.minecraft_version} · {selectedInstance?.loader_type.toUpperCase()})
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setVersionModal(null)}
-                className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-white/10 transition-colors shrink-0"
+                className="p-2 text-ink-muted hover:text-ink rounded-xl hover:bg-white/10 transition-colors shrink-0"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Sürüm Filtreleme & Arama Araç Çubuğu */}
-            <div className="flex items-center justify-between gap-3 flex-wrap bg-[#070412]/80 p-3 rounded-2xl border border-purple-500/20">
-              <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+            <div className="flex items-center justify-between gap-3 flex-wrap bg-surface/90 p-3 rounded-2xl border border-line">
+              <span className="text-xs font-bold text-ink flex items-center gap-1.5">
                 <span>⚡</span>
                 <span>Mevcut Sürümler ({versionModal.versions.length})</span>
               </span>
@@ -3244,7 +3044,7 @@ export default function App() {
                 <select
                   value={versionModal.filterLoader}
                   onChange={(e) => setVersionModal((prev) => prev ? { ...prev, filterLoader: e.target.value } : null)}
-                  className="px-2.5 py-1.5 bg-[#0e0a24] border border-purple-500/30 rounded-xl text-xs text-slate-300 outline-none focus:border-cyan-400"
+                  className="px-2.5 py-1.5 bg-surface border border-line rounded-xl text-xs text-ink outline-none focus:border-accent"
                 >
                   <option value="all">Tüm Yükleyiciler</option>
                   <option value="forge">Forge</option>
@@ -3257,7 +3057,7 @@ export default function App() {
                 <select
                   value={versionModal.filterGameVersion}
                   onChange={(e) => setVersionModal((prev) => prev ? { ...prev, filterGameVersion: e.target.value } : null)}
-                  className="px-2.5 py-1.5 bg-[#0e0a24] border border-purple-500/30 rounded-xl text-xs text-slate-300 outline-none focus:border-cyan-400"
+                  className="px-2.5 py-1.5 bg-surface border border-line rounded-xl text-xs text-ink outline-none focus:border-accent"
                 >
                   <option value="all">Tüm MC Sürümleri</option>
                   {Array.from(new Set(versionModal.versions.flatMap((v) => v.game_versions || []))).slice(0, 15).map((gv) => (
@@ -3272,14 +3072,14 @@ export default function App() {
               {versionModal.isLoading ? (
                 <div className="p-12 text-center space-y-3">
                   <div className="text-3xl animate-spin">⏳</div>
-                  <p className="text-slate-400 text-xs font-mono">Modrinth sunucusundan sürümler alınıyor...</p>
+                  <p className="text-ink-muted text-xs font-mono">Modrinth sunucusundan sürümler alınıyor...</p>
                 </div>
               ) : versionModal.error ? (
                 <div className="p-8 text-center text-red-400 text-xs font-mono bg-red-950/20 border border-red-500/30 rounded-2xl">
                   Sürümler yüklenemedi: {versionModal.error}
                 </div>
               ) : versionModal.versions.length === 0 ? (
-                <div className="p-8 text-center text-slate-400 text-xs font-mono">
+                <div className="p-8 text-center text-ink-muted text-xs font-mono">
                   Bu proje için henüz uygun sürüm bulunamadı.
                 </div>
               ) : (
@@ -3296,11 +3096,11 @@ export default function App() {
 
                   if (filtered.length === 0) {
                     return (
-                      <div className="p-8 text-center text-slate-400 text-xs font-mono bg-[#090518] rounded-2xl border border-white/5 space-y-2">
+                      <div className="p-8 text-center text-ink-muted text-xs font-mono bg-surface rounded-2xl border border-white/5 space-y-2">
                         <p>Seçili filtrelere uygun sürüm bulunamadı.</p>
                         <button
                           onClick={() => setVersionModal((prev) => prev ? { ...prev, filterLoader: "all", filterGameVersion: "all" } : null)}
-                          className="text-xs text-cyan-400 hover:underline font-bold"
+                          className="text-xs text-accent hover:underline font-bold"
                         >
                           Filtreleri Temizle (Tüm Sürümleri Göster)
                         </button>
@@ -3318,20 +3118,20 @@ export default function App() {
                     return (
                       <div
                         key={v.id}
-                        className={`p-4 rounded-2xl border transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-4 backdrop-blur-xl ${
+                        className={`p-4 rounded-2xl border transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-4 ${
                           isCompatible
-                            ? "bg-purple-950/40 border-cyan-400/50 shadow-[0_0_20px_rgba(34,211,238,0.15)]"
+                            ? "bg-surface-2 border-line shadow-[0_0_20px_rgba(34,211,238,0.15)]"
                             : isVanilla
-                            ? "bg-[#14080a]/90 border-amber-500/30"
-                            : "bg-[#090618]/90 border-purple-500/20 hover:border-purple-500/40"
+                            ? "bg-surface/90 border-amber-500/30"
+                            : "bg-surface-2/95 border-line hover:border-line"
                         }`}
                       >
                         <div className="space-y-1.5 flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <h4 className="text-sm font-black text-white">{v.version_number}</h4>
-                            <span className="text-[11px] text-slate-400 truncate max-w-xs font-mono">({v.name})</span>
+                            <h4 className="text-sm font-semibold text-ink">{v.version_number}</h4>
+                            <span className="text-[11px] text-ink-muted truncate max-w-xs font-mono">({v.name})</span>
                             {isCompatible && (
-                              <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 text-[10px] font-bold">
+                              <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-400/40 text-[10px] font-bold">
                                 ✅ BU PROFİLLE TAM UYUMLU
                               </span>
                             )}
@@ -3355,26 +3155,26 @@ export default function App() {
                                 lLower === "forge"
                                   ? "bg-orange-500/20 text-orange-300 border-orange-500/40"
                                   : lLower === "fabric"
-                                  ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40"
+                                  ? "bg-cyan-500/20 text-accent border-cyan-500/40"
                                   : lLower === "neoforge"
-                                  ? "bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/40"
-                                  : "bg-purple-500/20 text-purple-300 border-purple-500/40";
+                                  ? "bg-accent-soft text-accent border-line"
+                                  : "bg-purple-500/20 text-ink-muted border-line";
                               return (
                                 <span key={l} className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${colorClass}`}>
                                   {l.toUpperCase()}
                                 </span>
                               );
                             })}
-                            <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-emerald-950/60 text-emerald-300 border border-emerald-500/30">
+                            <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-emerald-950/60 text-emerald-400 border border-emerald-500/30">
                               🎮 MC {v.game_versions?.join(", ") || "Hepsi"}
                             </span>
                           </div>
 
                           {/* Tarih ve Boyut Bilgisi */}
-                          <div className="flex items-center gap-4 text-[10px] text-slate-400 font-mono pt-0.5">
-                            <span className="text-slate-300">📅 {formatPublishDate(v.date_published)}</span>
+                          <div className="flex items-center gap-4 text-[10px] text-ink-muted font-mono pt-0.5">
+                            <span className="text-ink">📅 {formatPublishDate(v.date_published)}</span>
                             {primaryFile && (
-                              <span className="text-slate-400">📦 {(primaryFile.size / (1024 * 1024)).toFixed(1)} MB</span>
+                              <span className="text-ink-muted">📦 {(primaryFile.size / (1024 * 1024)).toFixed(1)} MB</span>
                             )}
                           </div>
                         </div>
@@ -3382,7 +3182,7 @@ export default function App() {
                         {/* Kur Butonu */}
                         <button
                           onClick={() => installSpecificVersion(v, versionModal.project, versionModal.type)}
-                          className="px-5 py-2.5 rounded-xl font-black text-xs transition-all shadow-md active:scale-95 shrink-0 flex items-center gap-1.5 bg-gradient-to-r from-purple-600 via-cyan-600 to-teal-500 hover:from-purple-500 hover:to-teal-400 text-white shadow-purple-600/30"
+                          className="px-5 py-2.5 rounded-xl font-semibold text-xs transition-all shadow-md shrink-0 flex items-center gap-1.5 bg-accent hover:bg-accent-hover text-[#0a0b0d] shadow-purple-600/30"
                         >
                           <span>⚡</span>
                           <span>İndir ve Kur</span>
@@ -3399,15 +3199,15 @@ export default function App() {
 
       {/* ── CELEBRATION TOAST ───────────────────────────────────────────── */}
       {celebrationToast && (
-        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-2xl bg-[#0e0922]/95 border border-emerald-400/60 shadow-[0_0_30px_rgba(16,185,129,0.4)] flex items-center gap-3 backdrop-blur-2xl animate-fadeIn">
+        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-2xl bg-surface/95 border border-emerald-400/60 shadow-[0_0_30px_rgba(16,185,129,0.4)] flex items-center gap-3 animate-fadeIn">
           <div className="w-10 h-10 rounded-xl bg-emerald-900/60 border border-emerald-500/40 flex items-center justify-center text-xl shrink-0">
             🎉
           </div>
           <div>
-            <h4 className="text-xs font-bold text-white">{celebrationToast.title}</h4>
-            <p className="text-[10px] text-emerald-300">{celebrationToast.subtitle}</p>
+            <h4 className="text-xs font-bold text-ink">{celebrationToast.title}</h4>
+            <p className="text-[10px] text-emerald-400">{celebrationToast.subtitle}</p>
           </div>
-          <button onClick={() => setCelebrationToast(null)} className="text-slate-400 hover:text-white ml-2">
+          <button onClick={() => setCelebrationToast(null)} className="text-ink-muted hover:text-ink ml-2">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -3415,44 +3215,44 @@ export default function App() {
 
       {/* ── MODAL: YENİ PROFİL OLUŞTUR ────────────────────────────────────── */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4">
-          <div className="bg-[#0e0922] border border-purple-500/30 rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-4">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-surface border border-line rounded-2xl p-6 w-full max-w-md space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-black text-white">Yeni Profil Oluştur</h3>
-              <button onClick={() => setIsAddModalOpen(false)} className="text-slate-400 hover:text-white">
+              <h3 className="text-lg font-semibold text-ink">Yeni Profil Oluştur</h3>
+              <button onClick={() => setIsAddModalOpen(false)} className="text-ink-muted hover:text-ink">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleCreateInstance} className="space-y-4">
               <div>
-                <label className="text-xs font-mono text-slate-400">Profil Adı:</label>
+                <label className="text-xs font-mono text-ink-muted">Profil Adı:</label>
                 <input
                   type="text"
                   value={newInstanceName}
                   onChange={(e) => setNewInstanceName(e.target.value)}
                   placeholder="örn: TACZ Gun World..."
-                  className="w-full mt-1 p-2.5 bg-[#090616] border border-purple-500/20 rounded-xl text-xs text-white outline-none focus:border-cyan-400"
+                  className="w-full mt-1 p-2.5 bg-surface-2 border border-line rounded-xl text-xs text-ink outline-none focus:border-accent"
                   required
                 />
               </div>
 
               <div>
-                <label className="text-xs font-mono text-slate-400">Minecraft Sürümü:</label>
+                <label className="text-xs font-mono text-ink-muted">Minecraft Sürümü:</label>
                 <input
                   type="text"
                   value={newMcVersion}
                   onChange={(e) => setNewMcVersion(e.target.value)}
-                  className="w-full mt-1 p-2.5 bg-[#090616] border border-purple-500/20 rounded-xl text-xs text-white"
+                  className="w-full mt-1 p-2.5 bg-surface-2 border border-line rounded-xl text-xs text-ink"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-mono text-slate-400">Mod Yükleyici:</label>
+                <label className="text-xs font-mono text-ink-muted">Mod Yükleyici:</label>
                 <select
                   value={newLoaderType}
                   onChange={(e) => setNewLoaderType(e.target.value as LoaderType)}
-                  className="w-full mt-1 p-2.5 bg-[#090616] border border-purple-500/20 rounded-xl text-xs text-white"
+                  className="w-full mt-1 p-2.5 bg-surface-2 border border-line rounded-xl text-xs text-ink"
                 >
                   <option value="forge">Forge</option>
                   <option value="fabric">Fabric</option>
@@ -3462,7 +3262,7 @@ export default function App() {
               </div>
 
               <div>
-                <label className="text-xs font-mono text-slate-400">Ayrılan RAM ({newMemory} MB):</label>
+                <label className="text-xs font-mono text-ink-muted">Ayrılan RAM ({newMemory} MB):</label>
                 <input
                   type="range"
                   min="2048"
@@ -3478,13 +3278,13 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="flex-1 py-2.5 bg-slate-800 text-slate-300 font-bold text-xs rounded-xl"
+                  className="flex-1 py-2.5 bg-surface-3 text-ink font-bold text-xs rounded-xl"
                 >
                   İptal
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 bg-cyan-500 text-slate-950 font-black text-xs rounded-xl shadow-md"
+                  className="flex-1 py-2.5 bg-accent text-[#0a0b0d] font-semibold text-xs rounded-xl shadow-md"
                 >
                   Oluştur
                 </button>
@@ -3496,19 +3296,19 @@ export default function App() {
 
       {/* ── MODAL: PROFİL & RAM AYARLARI ───────────────────────────────── */}
       {profileSettingsModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fadeIn">
-          <div className="bg-[#181622] border-4 border-[#2d2c38] rounded-3xl p-6 sm:p-7 w-full max-w-xl shadow-[0_0_50px_rgba(0,0,0,0.8)] space-y-6">
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 animate-fadeIn">
+          <div className="bg-surface-2 border border-line rounded-2xl p-6 sm:p-7 w-full max-w-xl shadow-[0_0_50px_rgba(0,0,0,0.8)] space-y-6">
             {/* Modal Başlığı */}
-            <div className="flex items-center justify-between border-b-2 border-[#2d2c38] pb-4">
+            <div className="flex items-center justify-between border-b-2 border-line pb-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-purple-900/40 border border-purple-500/40 flex items-center justify-center text-xl">
+                <div className="w-10 h-10 rounded-xl bg-purple-900/40 border border-line flex items-center justify-center text-xl">
                   ⚙️
                 </div>
                 <div>
-                  <h3 className="text-lg font-black text-white font-mono uppercase tracking-wide">
+                  <h3 className="text-lg font-semibold text-ink font-mono uppercase tracking-wide">
                     Profil & RAM Ayarları
                   </h3>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-ink-muted">
                     {profileSettingsModal.instance.name} (MC v{profileSettingsModal.instance.minecraft_version} · {profileSettingsModal.instance.loader_type.toUpperCase()})
                   </p>
                 </div>
@@ -3518,7 +3318,7 @@ export default function App() {
                   sfx.playClick();
                   setProfileSettingsModal(null);
                 }}
-                className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition-all"
+                className="p-2 rounded-xl text-ink-muted hover:text-ink hover:bg-surface-3/80 transition-all"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -3528,7 +3328,7 @@ export default function App() {
             <div className="space-y-5">
               {/* 1. Profil Adı */}
               <div>
-                <label className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                <label className="text-xs font-bold text-ink uppercase tracking-wider flex items-center gap-2">
                   <span>🏷️</span> Profil Adı:
                 </label>
                 <input
@@ -3539,7 +3339,7 @@ export default function App() {
                       prev ? { ...prev, name: e.target.value } : null
                     )
                   }
-                  className="w-full mt-1.5 p-3 bg-[#0d0b17] border-2 border-[#2d2c38] focus:border-cyan-400 rounded-xl text-xs text-white outline-none transition-all"
+                  className="w-full mt-1.5 p-3 bg-surface border-2 border-line focus:border-accent rounded-xl text-xs text-ink outline-none transition-all"
                   placeholder="Profil adı..."
                 />
               </div>
@@ -3547,20 +3347,20 @@ export default function App() {
               {/* 2. RAM Tahsisi (Minecraft XP Bar Tasarımlı) */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                  <label className="text-xs font-bold text-ink uppercase tracking-wider flex items-center gap-2">
                     <span>💾</span> RAM Tahsisi (Bellek):
                   </label>
                   <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-1 bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 rounded-lg font-mono font-black text-xs">
+                    <span className="px-2.5 py-1 bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 rounded-lg font-mono font-semibold text-xs">
                       {(profileSettingsModal.memoryMb / 1024).toFixed(1)} GB ({profileSettingsModal.memoryMb} MB)
                     </span>
                   </div>
                 </div>
 
                 {/* Minecraft XP Barı Temalı Dolgu Çubuğu */}
-                <div className="relative w-full h-3 bg-[#0e0c18] border-2 border-[#2b2938] rounded-full overflow-hidden p-0.5">
+                <div className="relative w-full h-3 bg-surface border-2 border-line rounded-full overflow-hidden p-0.5">
                   <div
-                    className="h-full bg-gradient-to-r from-emerald-600 via-green-400 to-lime-300 rounded-full transition-all duration-300 shadow-[0_0_12px_rgba(74,222,128,0.5)]"
+                    className="h-full bg-accent rounded-full transition-all duration-300 shadow-[0_0_12px_rgba(74,222,128,0.5)]"
                     style={{
                       width: `${Math.min(
                         100,
@@ -3583,12 +3383,12 @@ export default function App() {
                       prev ? { ...prev, memoryMb: val } : null
                     );
                   }}
-                  className="w-full accent-emerald-400 cursor-pointer"
+                  className="w-full accent-accent cursor-pointer"
                 />
 
                 {/* Hızlı Seçim Butonları */}
                 <div className="flex items-center gap-1.5 flex-wrap pt-1">
-                  <span className="text-[10px] text-slate-400 font-mono font-bold mr-1">Hızlı Seç:</span>
+                  <span className="text-[10px] text-ink-muted font-mono font-bold mr-1">Hızlı Seç:</span>
                   {[2048, 4096, 6144, 8192, 10240, 12288, 16384].map((mb) => {
                     const gb = mb / 1024;
                     const isActive = profileSettingsModal.memoryMb === mb;
@@ -3604,8 +3404,8 @@ export default function App() {
                         }}
                         className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold border transition-all ${
                           isActive
-                            ? "bg-emerald-500 text-slate-950 border-emerald-400 font-black shadow-md shadow-emerald-500/20"
-                            : "bg-[#0e0c18] text-slate-400 border-[#2d2c38] hover:text-white hover:border-slate-500"
+                            ? "bg-emerald-500 text-[#0a0b0d] border-emerald-400 font-semibold shadow-md shadow-emerald-500/20"
+                            : "bg-surface text-ink-muted border-line hover:text-ink hover:border-slate-500"
                         }`}
                       >
                         {gb} GB
@@ -3613,7 +3413,7 @@ export default function App() {
                     );
                   })}
                 </div>
-                <p className="text-[10px] text-slate-500 italic pt-0.5">
+                <p className="text-[10px] text-ink-dim italic pt-0.5">
                   💡 İpucu: Vanilla için 3-4 GB, standart modlu için 6-8 GB, ağır modpackler için 8-12 GB önerilir.
                 </p>
               </div>
@@ -3621,7 +3421,7 @@ export default function App() {
               {/* 3. Java / JVM Başlatma Parametreleri */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                  <label className="text-xs font-bold text-ink uppercase tracking-wider flex items-center gap-2">
                     <span>⚡</span> JVM Argümanları:
                   </label>
                   <button
@@ -3650,20 +3450,20 @@ export default function App() {
                     )
                   }
                   placeholder="-XX:+UseG1GC ..."
-                  className="w-full p-2.5 bg-[#0d0b17] border-2 border-[#2d2c38] focus:border-cyan-400 rounded-xl text-[11px] font-mono text-slate-300 outline-none transition-all resize-none"
+                  className="w-full p-2.5 bg-surface border-2 border-line focus:border-accent rounded-xl text-[11px] font-mono text-ink outline-none transition-all resize-none"
                 />
               </div>
             </div>
 
             {/* Alt Butonlar */}
-            <div className="flex gap-3 pt-2 border-t-2 border-[#2d2c38]">
+            <div className="flex gap-3 pt-2 border-t-2 border-line">
               <button
                 type="button"
                 onClick={() => {
                   sfx.playClick();
                   setProfileSettingsModal(null);
                 }}
-                className="flex-1 py-3 bg-[#1e1c2a] hover:bg-[#282538] text-slate-300 font-bold text-xs rounded-xl border border-[#383648] transition-all"
+                className="flex-1 py-3 bg-surface-2 hover:bg-surface-3 text-ink font-bold text-xs rounded-xl border border-line transition-all"
               >
                 ✕ İptal
               </button>
@@ -3671,7 +3471,7 @@ export default function App() {
                 type="button"
                 disabled={profileSettingsModal.isSaving}
                 onClick={handleSaveInstanceSettings}
-                className="flex-1 py-3 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-black text-xs rounded-xl shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
+                className="flex-1 py-3 bg-accent hover:bg-accent-hover text-[#0a0b0d] font-semibold text-xs rounded-xl shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 <span>💾</span>
                 <span>{profileSettingsModal.isSaving ? "Kaydediliyor..." : "Ayarları Kaydet"}</span>
@@ -3683,25 +3483,25 @@ export default function App() {
 
       {/* ── MODAL: ⚡ GERÇEK FPS OPTİMİZASYON SİHİRBAZI ──────────────────── */}
       {optimizationModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fadeIn">
-          <div className="bg-[#161520] border-4 border-[#2d2c38] rounded-3xl p-6 sm:p-8 w-full max-w-lg shadow-[0_0_60px_rgba(0,0,0,0.9)] space-y-6">
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 animate-fadeIn">
+          <div className="bg-surface-2 border border-line rounded-2xl p-6 sm:p-8 w-full max-w-lg shadow-[0_0_60px_rgba(0,0,0,0.9)] space-y-6">
             {/* Üst Alan */}
-            <div className="flex items-center justify-between border-b-2 border-[#2d2c38] pb-4">
+            <div className="flex items-center justify-between border-b-2 border-line pb-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500/20 to-emerald-500/20 border-2 border-amber-400/50 flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(245,158,11,0.2)]">
+                <div className="w-12 h-12 rounded-2xl bg-surface-3 border border-line flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(245,158,11,0.2)]">
                   ⚡
                 </div>
                 <div>
-                  <h3 className="text-lg font-black text-white font-mono uppercase tracking-wide flex items-center gap-2">
+                  <h3 className="text-lg font-semibold text-ink font-mono uppercase tracking-wide flex items-center gap-2">
                     <span>FPS Optimizasyonu</span>
                     {optimizationModal.stage === 4 && (
-                      <span className="text-[10px] bg-emerald-500 text-slate-950 px-2 py-0.5 rounded-full font-black">
+                      <span className="text-[10px] bg-emerald-500 text-[#0a0b0d] px-2 py-0.5 rounded-full font-semibold">
                         AKTİF
                       </span>
                     )}
                   </h3>
-                  <p className="text-xs text-slate-400">
-                    Hedef: <span className="text-cyan-300 font-bold">{optimizationModal.instance.name}</span>
+                  <p className="text-xs text-ink-muted">
+                    Hedef: <span className="text-accent font-bold">{optimizationModal.instance.name}</span>
                   </p>
                 </div>
               </div>
@@ -3711,7 +3511,7 @@ export default function App() {
                     sfx.playClick();
                     setOptimizationModal(null);
                   }}
-                  className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition-all"
+                  className="p-2 rounded-xl text-ink-muted hover:text-ink hover:bg-surface-3/80 transition-all"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -3736,8 +3536,8 @@ export default function App() {
                         key={step}
                         className={`h-2 rounded-full transition-all duration-500 ${
                           optimizationModal.stage >= step
-                            ? "bg-gradient-to-r from-amber-400 to-emerald-400 shadow-[0_0_10px_rgba(74,222,128,0.5)]"
-                            : "bg-[#272535]"
+                            ? "bg-accent"
+                            : "bg-surface-3"
                         }`}
                       />
                     ))}
@@ -3748,45 +3548,45 @@ export default function App() {
                   {/* Başarı Kutusu */}
                   <div className="p-4 rounded-2xl bg-emerald-950/40 border-2 border-emerald-500/50 flex items-center justify-between shadow-[0_0_25px_rgba(16,185,129,0.2)]">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-xl text-emerald-300">
+                      <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-xl text-emerald-400">
                         🏆
                       </div>
                       <div>
-                        <h4 className="text-sm font-black text-white font-mono uppercase">
+                        <h4 className="text-sm font-semibold text-ink font-mono uppercase">
                           Optimizasyon Tamamlandı!
                         </h4>
-                        <p className="text-[11px] text-emerald-300 font-mono">
+                        <p className="text-[11px] text-emerald-400 font-mono">
                           Oyun içi grafikler ve bellek motoru ayarlandı.
                         </p>
                       </div>
                     </div>
-                    <span className="px-3 py-1 rounded-xl bg-emerald-500 text-slate-950 text-xs font-black shadow-md">
+                    <span className="px-3 py-1 rounded-xl bg-emerald-500 text-[#0a0b0d] text-xs font-semibold shadow-md">
                       {optimizationModal.report?.estimated_fps_boost || "+%40 - +%85 FPS"}
                     </span>
                   </div>
 
                   {/* Uygulanan Gerçek İşlemler Listesi */}
-                  <div className="space-y-2 bg-[#0e0c18] p-4 rounded-2xl border border-[#2d2c38]">
-                    <p className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider">
+                  <div className="space-y-2 bg-surface p-4 rounded-2xl border border-line">
+                    <p className="text-[10px] font-mono text-ink-muted font-bold uppercase tracking-wider">
                       Uygulanan Gerçek Ayarlar:
                     </p>
                     <ul className="space-y-2">
                       {optimizationModal.report?.details?.map((detail: string, idx: number) => (
-                        <li key={idx} className="flex items-start gap-2 text-xs text-slate-300">
+                        <li key={idx} className="flex items-start gap-2 text-xs text-ink">
                           <span className="text-emerald-400 font-bold shrink-0">✓</span>
                           <span>{detail}</span>
                         </li>
                       )) || (
                         <>
-                          <li className="flex items-start gap-2 text-xs text-slate-300">
+                          <li className="flex items-start gap-2 text-xs text-ink">
                             <span className="text-emerald-400 font-bold shrink-0">✓</span>
                             <span>options.txt: Fast Graphics, 8 Chunks, VSync Off, Parçacıklar Düşürüldü.</span>
                           </li>
-                          <li className="flex items-start gap-2 text-xs text-slate-300">
+                          <li className="flex items-start gap-2 text-xs text-ink">
                             <span className="text-emerald-400 font-bold shrink-0">✓</span>
                             <span>Sodium / Iris: Donanım hızlandırmalı GPU önbellek yapılandırması yazıldı.</span>
                           </li>
-                          <li className="flex items-start gap-2 text-xs text-slate-300">
+                          <li className="flex items-start gap-2 text-xs text-ink">
                             <span className="text-emerald-400 font-bold shrink-0">✓</span>
                             <span>JVM: Aikar's High-Performance G1GC bellek yönetimi aktif edildi.</span>
                           </li>
@@ -3807,7 +3607,7 @@ export default function App() {
                   sfx.playClick();
                   setOptimizationModal(null);
                 }}
-                className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-black text-xs rounded-xl shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
+                className="w-full py-3 bg-accent hover:bg-accent-hover text-[#0a0b0d] font-semibold text-xs rounded-xl shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 <span>⚔️</span>
                 <span>{optimizationModal.isOptimizing ? "İşleniyor..." : "Harika! Kapat"}</span>
