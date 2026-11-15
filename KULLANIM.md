@@ -47,7 +47,7 @@ sabit exe'ye yönlendirir. Kısayolun bozulması imkansız hale gelir.
 | `target/` (debug) | 14,66 GB | ~1,6 GB |
 | `target/` (release) | — | ~1,8 GB |
 | Kaynak klasörü (cache hariç) | — | ~0,15 GB |
-| Sabit exe | 26 MB (debug) | ~15 MB (release) |
+| Sabit exe | 26 MB (debug) | ~10 MB (release) |
 
 ## Derleme ayarları (`Cargo.toml`)
 

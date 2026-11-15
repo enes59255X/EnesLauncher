@@ -4,6 +4,8 @@ use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
+use std::sync::{Mutex, OnceLock};
+use std::time::{Duration, Instant};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct JavaRuntime {
@@ -15,8 +17,43 @@ pub struct JavaRuntime {
 
 pub struct JavaLocator;
 
+/// Disk taraması pahalı olduğu için sonuç 5 dk önbellekte tutulur.
+/// (Önceden her `get_system_status` ve her oyun başlatmada tam tarama yapılıyordu.)
+const JAVA_CACHE_TTL: Duration = Duration::from_secs(300);
+
+fn java_cache() -> &'static Mutex<Option<(Instant, Vec<JavaRuntime>)>> {
+    static CACHE: OnceLock<Mutex<Option<(Instant, Vec<JavaRuntime>)>>> = OnceLock::new();
+    CACHE.get_or_init(|| Mutex::new(None))
+}
+
 impl JavaLocator {
+    /// Kurulu Java çalışma zamanlarını döner (5 dakika önbellekli).
     pub fn locate_all() -> Vec<JavaRuntime> {
+        if let Ok(guard) = java_cache().lock() {
+            if let Some((scanned_at, runtimes)) = guard.as_ref() {
+                if scanned_at.elapsed() < JAVA_CACHE_TTL {
+                    return runtimes.clone();
+                }
+            }
+        }
+
+        let runtimes = Self::locate_all_uncached();
+
+        if let Ok(mut guard) = java_cache().lock() {
+            *guard = Some((Instant::now(), runtimes.clone()));
+        }
+
+        runtimes
+    }
+
+    /// Önbelleği geçersiz kılar (ör. kullanıcı yeni bir Java kurduğunda).
+    pub fn invalidate_cache() {
+        if let Ok(mut guard) = java_cache().lock() {
+            *guard = None;
+        }
+    }
+
+    fn locate_all_uncached() -> Vec<JavaRuntime> {
         let mut runtimes = Vec::new();
         let mut searched_paths = Vec::new();
 
@@ -115,12 +152,18 @@ impl JavaLocator {
         let all = Self::locate_all();
 
         // Tam eşleşen 64-bit Java
-        if let Some(exact) = all.iter().find(|j| j.major_version == required_major && j.is_64bit) {
+        if let Some(exact) = all
+            .iter()
+            .find(|j| j.major_version == required_major && j.is_64bit)
+        {
             return Ok(exact.clone());
         }
 
         // Geriye dönük uyumlu daha yeni 64-bit Java (örn: Minecraft 17 istiyor ama 21 var)
-        if let Some(newer) = all.iter().find(|j| j.major_version >= required_major && j.is_64bit) {
+        if let Some(newer) = all
+            .iter()
+            .find(|j| j.major_version >= required_major && j.is_64bit)
+        {
             return Ok(newer.clone());
         }
 
@@ -163,7 +206,9 @@ impl JavaLocator {
 
                         if !java_version.is_empty() {
                             let major = parse_major_version(&java_version);
-                            let is_64bit = os_arch.contains("x86_64") || os_arch.contains("amd64") || os_arch.contains("x64");
+                            let is_64bit = os_arch.contains("x86_64")
+                                || os_arch.contains("amd64")
+                                || os_arch.contains("x64");
                             return Some(JavaRuntime {
                                 path: java_exe.to_path_buf(),
                                 major_version: major,
@@ -246,4 +291,3 @@ mod tests {
         }
     }
 }
-

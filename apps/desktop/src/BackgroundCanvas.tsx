@@ -143,9 +143,15 @@ export function BackgroundCanvas({ settings }: { settings: BackgroundSettings })
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let animId: number;
+    // PERF: 60 fps yerine 30 fps. Pencere arkadayken/ikonikken döngü tamamen durur;
+    // aksi halde launcher kullanılmazken bile her karede 50 partikül çiziliyordu.
+    const FRAME_MS = 1000 / 30;
+
+    let animId = 0;
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
+    let lastTime = 0;
+    let running = !document.hidden;
 
     const handleResize = () => {
       if (!canvas) return;
@@ -153,6 +159,13 @@ export function BackgroundCanvas({ settings }: { settings: BackgroundSettings })
       height = canvas.height = window.innerHeight;
     };
     window.addEventListener("resize", handleResize);
+
+    // Sekme/pencere gizlendiğinde animasyonu durdur (CPU/GPU ve pil tasarrufu)
+    const handleVisibility = () => {
+      running = !document.hidden;
+      lastTime = 0;
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
 
     // Minecraft tarzı süzülen partiküller (Portal orbs & Sculk ruhları)
     const count = 50;
@@ -171,13 +184,22 @@ export function BackgroundCanvas({ settings }: { settings: BackgroundSettings })
       rotSpeed: (Math.random() - 0.5) * 0.02,
     }));
 
-    const render = () => {
+    const render = (time: number) => {
+      animId = requestAnimationFrame(render);
+
+      if (!running) return;
+      if (time - lastTime < FRAME_MS) return;
+
+      // Kare atlandığında hız aynı kalsın diye geçen süreye göre ölçekle
+      const dt = lastTime === 0 ? 1 : Math.min((time - lastTime) / (1000 / 60), 3);
+      lastTime = time;
+
       ctx.clearRect(0, 0, width, height);
 
       for (const p of particles) {
-        p.x += p.speedX;
-        p.y += p.speedY;
-        p.rotation += p.rotSpeed;
+        p.x += p.speedX * dt;
+        p.y += p.speedY * dt;
+        p.rotation += p.rotSpeed * dt;
 
         if (p.y < -10) {
           p.y = height + 10;
@@ -186,24 +208,25 @@ export function BackgroundCanvas({ settings }: { settings: BackgroundSettings })
         if (p.x < -10) p.x = width + 10;
         if (p.x > width + 10) p.x = -10;
 
-        ctx.save();
-        ctx.translate(p.x, p.y);
+        // save()/restore() yerine tek transform: kare başına 50 çift çağrı azalır
+        ctx.setTransform(1, 0, 0, 1, p.x, p.y);
         ctx.rotate(p.rotation);
         ctx.globalAlpha = p.opacity;
         ctx.fillStyle = p.color;
 
         // Pikselli kare blok efekti
         ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-        ctx.restore();
       }
 
-      animId = requestAnimationFrame(render);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.globalAlpha = 1;
     };
 
-    render();
+    animId = requestAnimationFrame(render);
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      document.removeEventListener("visibilitychange", handleVisibility);
       cancelAnimationFrame(animId);
     };
   }, [settings.particlesEnabled, settings.presetTheme]);

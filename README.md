@@ -157,6 +157,7 @@ opt-level = 1
 [profile.release]
 lto = "thin"
 strip = "symbols"
+panic = "abort"
 ```
 
 Bu ayarlar olmadan bir Tauri debug derlemesi Windows'ta 15 GB'a kadar çıkabilir

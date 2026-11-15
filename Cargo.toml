@@ -22,7 +22,7 @@ resolver = "2"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 thiserror = "2.0"
-tokio = { version = "1.40", features = ["full"] }
+tokio = { version = "1.40", features = ["rt-multi-thread", "macros", "fs", "io-util", "net", "time", "sync"] }
 tracing = { version = "0.1" }
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 rusqlite = { version = "0.32", features = ["bundled"] }
@@ -32,7 +32,7 @@ sha2 = "0.10"
 zip = { version = "2.2", default-features = false, features = ["deflate"] }
 tempfile = "3.12"
 directories = "5.0"
-reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls", "stream"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "native-tls", "stream"] }
 futures-util = "0.3"
 winreg = "0.52"
 async-trait = "0.1"
@@ -56,3 +56,4 @@ opt-level = 1
 [profile.release]
 lto = "thin"
 strip = "symbols"
+panic = "abort"

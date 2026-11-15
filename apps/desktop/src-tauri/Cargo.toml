@@ -27,7 +27,7 @@ loader-adapters = { path = "../../../crates/loader-adapters" }
 modpack-engine = { path = "../../../crates/modpack-engine" }
 crash-analyzer = { path = "../../../crates/crash-analyzer" }
 auth-service = { path = "../../../crates/auth-service" }
-base64 = "0.23.1"
+base64 = "0.22"
 
 [build-dependencies]
 tauri-build = { version = "2.0", features = [] }
