@@ -19,11 +19,11 @@ function Create-LogoBitmap($size) {
     $path.CloseFigure()
     $g.FillPath($bgBrush, $path)
 
-    # Zümrüt Dýþ Kenarlýk
+    # Zï¿½mrï¿½t Dï¿½ï¿½ Kenarlï¿½k
     $borderPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 52, 211, 153), [Math]::Max(1.5, $size * 0.03))
     $g.DrawPath($borderPen, $path)
 
-    # 3D Ýzometrik Zümrüt Küp
+    # 3D ï¿½zometrik Zï¿½mrï¿½t Kï¿½p
     $cx = $size / 2.0
     $cy = $size / 2.0
     $w = $size * 0.35
@@ -37,19 +37,19 @@ function Create-LogoBitmap($size) {
     $botLeft = [System.Drawing.PointF]::new($cx - $w, $cy + $h * 0.85)
     $botRight = [System.Drawing.PointF]::new($cx + $w, $cy + $h * 0.85)
 
-    # Üst yüzey (Açýk Zümrüt)
+    # ï¿½st yï¿½zey (Aï¿½ï¿½k Zï¿½mrï¿½t)
     $topBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 52, 211, 153))
     $g.FillPolygon($topBrush, @($top, $right, $mid, $left))
 
-    # Sol yüzey (Orta Zümrüt)
+    # Sol yï¿½zey (Orta Zï¿½mrï¿½t)
     $leftBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 16, 185, 129))
     $g.FillPolygon($leftBrush, @($left, $mid, $bot, $botLeft))
 
-    # Sað yüzey (Koyu Zümrüt)
+    # Saï¿½ yï¿½zey (Koyu Zï¿½mrï¿½t)
     $rightBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255, 4, 120, 87))
     $g.FillPolygon($rightBrush, @($mid, $right, $botRight, $bot))
 
-    # Küp Hatlarý
+    # Kï¿½p Hatlarï¿½
     $cubePen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255, 167, 243, 208), [Math]::Max(1.0, $size * 0.02))
     $g.DrawPolygon($cubePen, @($top, $right, $botRight, $bot, $botLeft, $left))
     $g.DrawLine($cubePen, $mid, $top)
@@ -70,8 +70,8 @@ function Create-LogoBitmap($size) {
     return $bmp
 }
 
-$iconsPath = "c:\Users\Enes\Desktop\Masaüstü Klasörü\antigravity\EnesLauncher\apps\desktop\src-tauri\icons"
-$publicPath = "c:\Users\Enes\Desktop\Masaüstü Klasörü\antigravity\EnesLauncher\apps\desktop\public"
+$iconsPath = "c:\Users\Enes\Desktop\Masaï¿½stï¿½ Klasï¿½rï¿½\Opencode\EnesLauncher\apps\desktop\src-tauri\icons"
+$publicPath = "c:\Users\Enes\Desktop\Masaï¿½stï¿½ Klasï¿½rï¿½\Opencode\EnesLauncher\apps\desktop\public"
 
 $sizes = @(32, 128, 256)
 $bmps = @{}
@@ -85,7 +85,7 @@ $bmps[256].Save("$iconsPath\128x128@2x.png", [System.Drawing.Imaging.ImageFormat
 $bmps[256].Save("$iconsPath\icon.png", [System.Drawing.Imaging.ImageFormat]::Png)
 $bmps[256].Save("$publicPath\icon.png", [System.Drawing.Imaging.ImageFormat]::Png)
 
-# Windows .ico Üretimi (Icon handle'dan)
+# Windows .ico ï¿½retimi (Icon handle'dan)
 $iconHandle = $bmps[256].GetHicon()
 $icon = [System.Drawing.Icon]::FromHandle($iconHandle)
 $fs = New-Object System.IO.FileStream("$iconsPath\icon.ico", [System.IO.FileMode]::Create)
@@ -93,4 +93,4 @@ $icon.Save($fs)
 $fs.Close()
 $icon.Dispose()
 
-Write-Host "Tüm ikonlar baþarýyla üretildi!"
+Write-Host "Tï¿½m ikonlar baï¿½arï¿½yla ï¿½retildi!"
