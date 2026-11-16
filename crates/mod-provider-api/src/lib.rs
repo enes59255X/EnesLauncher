@@ -53,6 +53,12 @@ pub struct ModSearchResult {
     pub categories: Vec<String>,
     pub supported_versions: Vec<String>,
     pub supported_loaders: Vec<String>,
+    /// Proje galerisi (kapak görselleri). Sağlayıcı desteklemiyorsa boş.
+    #[serde(default)]
+    pub gallery: Vec<String>,
+    /// Sağlayıcının önerdiği vurgu rengi (0xRRGGBB).
+    #[serde(default)]
+    pub color: Option<u32>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

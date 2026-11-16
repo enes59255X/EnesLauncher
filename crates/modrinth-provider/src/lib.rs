@@ -52,6 +52,10 @@ struct LabrinthSearchHit {
     follows: u64,
     categories: Option<Vec<String>>,
     versions: Option<Vec<String>>,
+    #[serde(default)]
+    gallery: Option<Vec<String>>,
+    #[serde(default)]
+    color: Option<u32>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -173,6 +177,8 @@ impl ModProvider for ModrinthProvider {
                 categories: hit.categories.unwrap_or_default(),
                 supported_versions: hit.versions.unwrap_or_default(),
                 supported_loaders: Vec::new(),
+                gallery: hit.gallery.unwrap_or_default(),
+                color: hit.color,
             })
             .collect();
 
@@ -244,6 +250,8 @@ impl ModProvider for ModrinthProvider {
                 categories: hit.categories.unwrap_or_default(),
                 supported_versions: hit.versions.unwrap_or_default(),
                 supported_loaders: Vec::new(),
+                gallery: hit.gallery.unwrap_or_default(),
+                color: hit.color,
             })
             .collect();
 
@@ -310,6 +318,8 @@ impl ModProvider for ModrinthProvider {
                 categories: hit.categories.unwrap_or_default(),
                 supported_versions: hit.versions.unwrap_or_default(),
                 supported_loaders: Vec::new(),
+                gallery: hit.gallery.unwrap_or_default(),
+                color: hit.color,
             })
             .collect();
 

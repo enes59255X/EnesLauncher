@@ -24,6 +24,10 @@ export interface ModSearchResult {
   follows: number;
   categories: string[];
   supported_versions: string[];
+  /** Proje galerisi (kapak görselleri) — ilk görsel kart kapağı olarak kullanılır. */
+  gallery?: string[];
+  /** Sağlayıcının önerdiği vurgu rengi (0xRRGGBB). */
+  color?: number;
 }
 
 export interface SearchFilterQuery {

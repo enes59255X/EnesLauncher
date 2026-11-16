@@ -260,6 +260,76 @@ function LauncherLogo({
   );
 }
 
+// ── Modpack / mod kapak görseli ────────────────────────────────────────────
+// Galeri görseli varsa onu, yoksa proje ikonunu, o da yoksa yer tutucuyu gösterir.
+// Görsel yüklenemezse otomatik olarak ikona düşer (kırık görsel kutusu oluşmaz).
+function ProjectCover({
+  gallery,
+  icon,
+  title,
+  color,
+  className = "",
+}: {
+  gallery?: string[];
+  icon?: string;
+  title: string;
+  color?: number;
+  className?: string;
+}) {
+  const [coverFailed, setCoverFailed] = useState(false);
+  const [iconFailed, setIconFailed] = useState(false);
+
+  const cover = !coverFailed && gallery && gallery.length > 0 ? gallery[0] : undefined;
+  const accent =
+    typeof color === "number" && color > 0
+      ? `#${color.toString(16).padStart(6, "0")}`
+      : undefined;
+
+  if (cover) {
+    return (
+      <div className={`relative overflow-hidden bg-surface-3 ${className}`}>
+        <img
+          src={cover}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          referrerPolicy="no-referrer"
+          onError={() => setCoverFailed(true)}
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`relative flex items-center justify-center overflow-hidden bg-surface-3 ${className}`}
+      style={
+        accent
+          ? {
+              backgroundImage: `radial-gradient(120% 130% at 50% 0%, ${accent}40, transparent 72%)`,
+            }
+          : undefined
+      }
+    >
+      {icon && !iconFailed ? (
+        <img
+          src={icon}
+          alt={title}
+          loading="lazy"
+          decoding="async"
+          referrerPolicy="no-referrer"
+          onError={() => setIconFailed(true)}
+          className="w-16 h-16 rounded-xl object-cover ring-1 ring-white/10 shadow-lg shadow-black/30"
+        />
+      ) : (
+        <Box className="w-7 h-7 text-ink-dim" />
+      )}
+    </div>
+  );
+}
+
 export default function App() {
   const [activeTab, setActiveTab] = useState<
     "dashboard" | "instances" | "mods" | "modpacks" | "shaders" | "downloads" | "logs" | "accounts" | "settings"
@@ -1974,49 +2044,76 @@ export default function App() {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {modpackSearchResults.map((pack) => (
-                  <div key={pack.project_id}
-                    className="group p-5 rounded-2xl bg-surface/95 border border-emerald-500/20 hover:border-emerald-400/50 transition-all flex gap-4 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)]">
-                    {pack.icon_url ? (
-                      <img src={pack.icon_url} alt={pack.title} className="w-16 h-16 rounded-xl object-cover shrink-0 border border-white/10" />
-                    ) : (
-                      <div className="w-16 h-16 rounded-xl bg-emerald-950/60 border border-emerald-500/30 flex items-center justify-center text-3xl shrink-0">📦</div>
-                    )}
-                    <div className="flex-1 min-w-0 space-y-1.5">
-                      <h4 className="text-sm font-bold text-ink leading-tight">{pack.title}</h4>
-                      <p className="text-[11px] text-ink-muted line-clamp-2">{pack.description}</p>
-                      {/* Sürüm Seçici */}
-                      {modpackVersionsMap[pack.project_id] && modpackVersionsMap[pack.project_id].length > 0 && (
-                        <select
-                          value={selectedVersionUrlMap[pack.project_id] || ""}
-                          onChange={(e) => setSelectedVersionUrlMap((prev) => ({ ...prev, [pack.project_id]: e.target.value }))}
-                          className="w-full px-2 py-1.5 bg-surface-2 border border-emerald-500/20 rounded-lg text-[11px] text-ink outline-none focus:border-accent mt-1">
-                          {modpackVersionsMap[pack.project_id].map((v) => {
-                            const file = v.files.find(f => f.primary) || v.files[0];
-                            const loaders = v.loaders?.join(", ") || "?";
-                            
-                            return (
-                              <option key={v.id} value={file?.url || ""}>
-                                {v.version_number} · {loaders.toUpperCase()} · MC {v.game_versions?.join(",")}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      )}
-                      <div className="flex items-center justify-between pt-1">
-                        <div className="text-[10px] font-mono">
-                          <span className="text-emerald-400">⬇️ {(pack.downloads / 1000).toFixed(0)}k</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {modpackSearchResults.map((pack) => {
+                  const versions = modpackVersionsMap[pack.project_id];
+                  return (
+                    <div
+                      key={pack.project_id}
+                      className="group panel panel-hover overflow-hidden flex flex-col"
+                    >
+                      <ProjectCover
+                        gallery={pack.gallery}
+                        icon={pack.icon_url}
+                        title={pack.title}
+                        color={pack.color}
+                        className="h-32 w-full"
+                      />
+
+                      <div className="p-4 flex flex-col gap-2 flex-1">
+                        <div className="flex items-start justify-between gap-2">
+                          <h4 className="text-[13px] font-semibold text-ink leading-snug line-clamp-2">
+                            {pack.title}
+                          </h4>
+                          <span className="chip shrink-0">
+                            <Download className="w-3 h-3" />
+                            {(pack.downloads / 1000).toFixed(0)}k
+                          </span>
                         </div>
-                        <button
-                          onClick={() => openVersionSelector(pack, "modpack")}
-                          className="px-4 py-1.5 bg-accent hover:bg-accent-hover text-[#0a0b0d] font-bold text-xs rounded-xl shadow-md transition-all hover:shadow-[0_0_12px_rgba(16,185,129,0.4)]">
-                          ⚡ Kur
-                        </button>
+
+                        <p className="text-[11px] text-ink-muted leading-relaxed line-clamp-2">
+                          {pack.description}
+                        </p>
+
+                        {versions && versions.length > 0 && (
+                          <select
+                            value={selectedVersionUrlMap[pack.project_id] || ""}
+                            onChange={(e) =>
+                              setSelectedVersionUrlMap((prev) => ({
+                                ...prev,
+                                [pack.project_id]: e.target.value,
+                              }))
+                            }
+                            className="w-full h-8 px-2 bg-surface-2 border border-line rounded-lg text-[11px] text-ink-muted outline-none focus:border-accent transition-colors"
+                          >
+                            {versions.map((v) => {
+                              const file = v.files.find((f) => f.primary) || v.files[0];
+                              const loaders = v.loaders?.join(", ") || "?";
+                              return (
+                                <option key={v.id} value={file?.url || ""}>
+                                  {v.version_number} · {loaders.toUpperCase()} · MC{" "}
+                                  {v.game_versions?.join(",")}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        )}
+
+                        <div className="mt-auto flex items-center justify-between gap-2 pt-2">
+                          <span className="text-[11px] text-ink-dim truncate">
+                            {(pack.follows / 1000).toFixed(1)}k takipçi
+                          </span>
+                          <button
+                            onClick={() => openVersionSelector(pack, "modpack")}
+                            className="btn-accent h-8 px-3 text-[12px] shrink-0"
+                          >
+                            Kur
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* Modpack Sayfalama */}
