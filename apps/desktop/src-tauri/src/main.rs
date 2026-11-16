@@ -184,6 +184,9 @@ async fn install_remote_modpack(
     state: State<'_, AppState>,
     download_url: String,
     pack_name: String,
+    icon_url: Option<String>,
+    cover_url: Option<String>,
+    project_id: Option<String>,
 ) -> Result<InstanceSummary, String> {
     // 1. .mrpack dosyasını geçici konuma indir
     let temp_dir = tempfile::tempdir().map_err(|e| e.to_string())?;
@@ -233,6 +236,9 @@ async fn install_remote_modpack(
         loader_type,
         loader_version: loader_ver,
         allocated_memory_mb: Some(6144),
+        icon_url,
+        cover_url,
+        project_id,
     };
 
     let instance = {
@@ -806,6 +812,9 @@ async fn import_mrpack(
         loader_type,
         loader_version: loader_ver,
         allocated_memory_mb: Some(6144),
+        icon_url: None,
+        cover_url: None,
+        project_id: None,
     };
 
     let instance = {
@@ -819,6 +828,66 @@ async fn import_mrpack(
         .map_err(|e| e.to_string())?;
 
     Ok(instance)
+}
+
+/// Mevcut profiller için modpack kapak/ikon bilgisini Modrinth'ten tamamlar.
+/// Yalnızca profil adı bir Modrinth modpack başlığıyla birebir eşleşirse yazar;
+/// böylece yanlış kapak gösterme riski olmaz.
+#[tauri::command]
+async fn backfill_instance_art(
+    state: State<'_, AppState>,
+    instance_id: String,
+) -> Result<Option<InstanceSummary>, String> {
+    let instance = {
+        let db = state.db.lock().map_err(|e| e.to_string())?;
+        db.get_instance(&instance_id)
+            .map_err(|e| e.to_string())?
+            .ok_or_else(|| "Profil bulunamadı".to_string())?
+    };
+
+    // Zaten görseli olan profile dokunma.
+    if instance.icon_url.is_some() || instance.cover_url.is_some() {
+        return Ok(Some(instance));
+    }
+
+    let hits = state
+        .modrinth
+        .search_modpacks(&instance.name, None, None, 5)
+        .await
+        .map_err(|e| e.to_string())?;
+
+    let normalize = |s: &str| {
+        s.to_lowercase()
+            .split_whitespace()
+            .collect::<Vec<_>>()
+            .join(" ")
+    };
+    let target = normalize(&instance.name);
+
+    let hit = match hits.into_iter().find(|h| normalize(&h.title) == target) {
+        Some(h) => h,
+        None => return Ok(None),
+    };
+
+    let cover = hit.gallery.first().cloned();
+
+    {
+        let db = state.db.lock().map_err(|e| e.to_string())?;
+        db.set_instance_art(
+            &instance_id,
+            hit.icon_url.as_deref(),
+            cover.as_deref(),
+            Some(hit.project_id.as_str()),
+        )
+        .map_err(|e| e.to_string())?;
+    }
+
+    let updated = {
+        let db = state.db.lock().map_err(|e| e.to_string())?;
+        db.get_instance(&instance_id).map_err(|e| e.to_string())?
+    };
+
+    Ok(updated)
 }
 
 #[tauri::command]
@@ -1266,6 +1335,7 @@ fn main() {
             set_instance_language,
             import_mrpack,
             export_instance_to_mrpack,
+            backfill_instance_art,
             analyze_crash_log,
             list_accounts,
             add_offline_account,

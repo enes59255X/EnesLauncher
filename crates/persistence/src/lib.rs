@@ -20,7 +20,8 @@ impl Database {
     }
 
     pub fn open_in_memory() -> LauncherResult<Self> {
-        let conn = Connection::open_in_memory().map_err(|e| LauncherError::Database(e.to_string()))?;
+        let conn =
+            Connection::open_in_memory().map_err(|e| LauncherError::Database(e.to_string()))?;
         let db = Self {
             conn: Mutex::new(conn),
         };
@@ -40,8 +41,9 @@ impl Database {
             PRAGMA synchronous = NORMAL;
             PRAGMA foreign_keys = ON;
             PRAGMA busy_timeout = 5000;
-            "
-        ).map_err(|e| LauncherError::Database(e.to_string()))?;
+            ",
+        )
+        .map_err(|e| LauncherError::Database(e.to_string()))?;
 
         conn.execute_batch(
             "
@@ -108,6 +110,12 @@ impl Database {
         )
         .map_err(|e| LauncherError::Database(e.to_string()))?;
 
+        // ── Artımlı göçler (mevcut veritabanları için) ──────────────────────
+        // SQLite'ta "ADD COLUMN IF NOT EXISTS" yok; kolon var mı diye bakıp ekliyoruz.
+        ensure_column(&conn, "instances", "icon_url", "TEXT")?;
+        ensure_column(&conn, "instances", "cover_url", "TEXT")?;
+        ensure_column(&conn, "instances", "project_id", "TEXT")?;
+
         Ok(())
     }
 
@@ -119,8 +127,8 @@ impl Database {
         let loader_str = req.loader_type.to_string();
 
         conn.execute(
-            "INSERT INTO instances (id, name, directory_name, minecraft_version, loader_type, loader_version, allocated_memory_mb)
-             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
+            "INSERT INTO instances (id, name, directory_name, minecraft_version, loader_type, loader_version, allocated_memory_mb, icon_url, cover_url, project_id)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
             params![
                 id,
                 req.name,
@@ -128,7 +136,10 @@ impl Database {
                 req.minecraft_version,
                 loader_str,
                 req.loader_version,
-                memory
+                memory,
+                req.icon_url,
+                req.cover_url,
+                req.project_id
             ],
         )
         .map_err(|e| LauncherError::Database(e.to_string()))?;
@@ -144,6 +155,9 @@ impl Database {
             jvm_arguments: None,
             created_at: chrono_like_now(),
             last_played_at: None,
+            icon_url: req.icon_url,
+            cover_url: req.cover_url,
+            project_id: req.project_id,
         })
     }
 
@@ -151,7 +165,7 @@ impl Database {
         let conn = self.conn.lock().unwrap();
         let mut stmt = conn
             .prepare(
-                "SELECT id, name, directory_name, minecraft_version, loader_type, loader_version, allocated_memory_mb, created_at, last_played_at, jvm_arguments
+                "SELECT id, name, directory_name, minecraft_version, loader_type, loader_version, allocated_memory_mb, created_at, last_played_at, jvm_arguments, icon_url, cover_url, project_id
                  FROM instances ORDER BY created_at DESC",
             )
             .map_err(|e| LauncherError::Database(e.to_string()))?;
@@ -159,7 +173,9 @@ impl Database {
         let rows = stmt
             .query_map([], |row| {
                 let loader_str: String = row.get(4)?;
-                let loader_type = loader_str.parse::<LoaderType>().unwrap_or(LoaderType::Vanilla);
+                let loader_type = loader_str
+                    .parse::<LoaderType>()
+                    .unwrap_or(LoaderType::Vanilla);
 
                 Ok(InstanceSummary {
                     id: row.get(0)?,
@@ -172,6 +188,9 @@ impl Database {
                     created_at: row.get(7)?,
                     last_played_at: row.get(8)?,
                     jvm_arguments: row.get(9)?,
+                    icon_url: row.get(10)?,
+                    cover_url: row.get(11)?,
+                    project_id: row.get(12)?,
                 })
             })
             .map_err(|e| LauncherError::Database(e.to_string()))?;
@@ -190,7 +209,7 @@ impl Database {
         let conn = self.conn.lock().unwrap();
         let mut stmt = conn
             .prepare(
-                "SELECT id, name, directory_name, minecraft_version, loader_type, loader_version, allocated_memory_mb, created_at, last_played_at, jvm_arguments
+                "SELECT id, name, directory_name, minecraft_version, loader_type, loader_version, allocated_memory_mb, created_at, last_played_at, jvm_arguments, icon_url, cover_url, project_id
                  FROM instances WHERE id = ?1 LIMIT 1",
             )
             .map_err(|e| LauncherError::Database(e.to_string()))?;
@@ -198,7 +217,9 @@ impl Database {
         let mut rows = stmt
             .query_map(params![id], |row| {
                 let loader_str: String = row.get(4)?;
-                let loader_type = loader_str.parse::<LoaderType>().unwrap_or(LoaderType::Vanilla);
+                let loader_type = loader_str
+                    .parse::<LoaderType>()
+                    .unwrap_or(LoaderType::Vanilla);
 
                 Ok(InstanceSummary {
                     id: row.get(0)?,
@@ -211,12 +232,17 @@ impl Database {
                     created_at: row.get(7)?,
                     last_played_at: row.get(8)?,
                     jvm_arguments: row.get(9)?,
+                    icon_url: row.get(10)?,
+                    cover_url: row.get(11)?,
+                    project_id: row.get(12)?,
                 })
             })
             .map_err(|e| LauncherError::Database(e.to_string()))?;
 
         if let Some(res) = rows.next() {
-            Ok(Some(res.map_err(|e| LauncherError::Database(e.to_string()))?))
+            Ok(Some(
+                res.map_err(|e| LauncherError::Database(e.to_string()))?,
+            ))
         } else {
             Ok(None)
         }
@@ -230,6 +256,29 @@ impl Database {
         Ok(affected > 0)
     }
 
+    /// Profilin kapak/ikon bilgisini günceller (modpack metadata'sı sonradan
+    /// bulunduğunda kullanılır). Yalnızca verilen alanlar yazılır.
+    pub fn set_instance_art(
+        &self,
+        id: &str,
+        icon_url: Option<&str>,
+        cover_url: Option<&str>,
+        project_id: Option<&str>,
+    ) -> LauncherResult<bool> {
+        let conn = self.conn.lock().unwrap();
+        let affected = conn
+            .execute(
+                "UPDATE instances
+                 SET icon_url = COALESCE(?1, icon_url),
+                     cover_url = COALESCE(?2, cover_url),
+                     project_id = COALESCE(?3, project_id)
+                 WHERE id = ?4",
+                params![icon_url, cover_url, project_id, id],
+            )
+            .map_err(|e| LauncherError::Database(e.to_string()))?;
+        Ok(affected > 0)
+    }
+
     pub fn update_instance_settings(
         &self,
         id: &str,
@@ -239,16 +288,25 @@ impl Database {
     ) -> LauncherResult<bool> {
         let conn = self.conn.lock().unwrap();
         if let Some(n) = name {
-            conn.execute("UPDATE instances SET name = ?1 WHERE id = ?2", params![n, id])
-                .map_err(|e| LauncherError::Database(e.to_string()))?;
+            conn.execute(
+                "UPDATE instances SET name = ?1 WHERE id = ?2",
+                params![n, id],
+            )
+            .map_err(|e| LauncherError::Database(e.to_string()))?;
         }
         if let Some(m) = memory_mb {
-            conn.execute("UPDATE instances SET allocated_memory_mb = ?1 WHERE id = ?2", params![m, id])
-                .map_err(|e| LauncherError::Database(e.to_string()))?;
+            conn.execute(
+                "UPDATE instances SET allocated_memory_mb = ?1 WHERE id = ?2",
+                params![m, id],
+            )
+            .map_err(|e| LauncherError::Database(e.to_string()))?;
         }
         if let Some(jvm) = jvm_arguments {
-            conn.execute("UPDATE instances SET jvm_arguments = ?1 WHERE id = ?2", params![jvm, id])
-                .map_err(|e| LauncherError::Database(e.to_string()))?;
+            conn.execute(
+                "UPDATE instances SET jvm_arguments = ?1 WHERE id = ?2",
+                params![jvm, id],
+            )
+            .map_err(|e| LauncherError::Database(e.to_string()))?;
         }
         Ok(true)
     }
@@ -256,8 +314,49 @@ impl Database {
 
 fn sanitize_dir_name(name: &str) -> String {
     name.chars()
-        .map(|c| if c.is_alphanumeric() || c == '-' || c == '_' { c } else { '_' })
+        .map(|c| {
+            if c.is_alphanumeric() || c == '-' || c == '_' {
+                c
+            } else {
+                '_'
+            }
+        })
         .collect()
+}
+
+/// SQLite'ta "ADD COLUMN IF NOT EXISTS" olmadığı için kolonun varlığını
+/// `PRAGMA table_info` ile kontrol edip yalnızca gerekiyorsa ekler.
+/// Böylece eski kurulumlardaki veritabanları da sorunsuz güncellenir.
+fn ensure_column(
+    conn: &Connection,
+    table: &str,
+    column: &str,
+    decl_type: &str,
+) -> LauncherResult<()> {
+    let mut stmt = conn
+        .prepare(&format!("PRAGMA table_info({})", table))
+        .map_err(|e| LauncherError::Database(e.to_string()))?;
+
+    let mut exists = false;
+    let rows = stmt
+        .query_map([], |row| row.get::<_, String>(1))
+        .map_err(|e| LauncherError::Database(e.to_string()))?;
+    for name in rows {
+        if name.map_err(|e| LauncherError::Database(e.to_string()))? == column {
+            exists = true;
+            break;
+        }
+    }
+
+    if !exists {
+        conn.execute(
+            &format!("ALTER TABLE {} ADD COLUMN {} {}", table, column, decl_type),
+            [],
+        )
+        .map_err(|e| LauncherError::Database(e.to_string()))?;
+    }
+
+    Ok(())
 }
 
 fn chrono_like_now() -> String {
@@ -282,6 +381,9 @@ mod tests {
                 loader_type: LoaderType::Fabric,
                 loader_version: Some("0.16.5".to_string()),
                 allocated_memory_mb: Some(6144),
+                icon_url: None,
+                cover_url: None,
+                project_id: None,
             })
             .unwrap();
 
@@ -300,4 +402,3 @@ mod tests {
         assert_eq!(list_after.len(), 0);
     }
 }
-

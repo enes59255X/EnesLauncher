@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Play,
   Layers,
@@ -336,6 +336,8 @@ export default function App() {
   >("dashboard");
 
   const [instances, setInstances] = useState<InstanceSummary[]>([]);
+  // Kapak görseli tamamlama denemesi yapılan profiller (oturum başına bir kez).
+  const artBackfillTried = useRef<Set<string>>(new Set());
   const [selectedInstanceId, setSelectedInstanceId] = useState<string>("");
   const [isLaunching, setIsLaunching] = useState(false);
   const [launchMessage, setLaunchMessage] = useState<string | null>(null);
@@ -541,8 +543,27 @@ export default function App() {
       if (instList.length > 0 && !selectedInstanceId) {
         setSelectedInstanceId(instList[0].id);
       }
+      void backfillMissingArt(instList);
     } catch (err) {
       console.error("Veri yüklenirken hata:", err);
+    }
+  }
+
+  // Görseli olmayan (eski kurulum) profiller için modpack kapağını bir kez
+  // Modrinth'ten tamamlamayı dener. Başarısız olursa sessizce geçer.
+  async function backfillMissingArt(list: InstanceSummary[]) {
+    for (const inst of list) {
+      if (inst.icon_url || inst.cover_url) continue;
+      if (artBackfillTried.current.has(inst.id)) continue;
+      artBackfillTried.current.add(inst.id);
+      try {
+        const updated = await api.backfillInstanceArt(inst.id);
+        if (updated) {
+          setInstances((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+        }
+      } catch {
+        // Kapak bulunamadı / ağ yok — profil varsayılan görünümde kalır.
+      }
     }
   }
 
@@ -808,7 +829,13 @@ export default function App() {
         await api.installRemoteMod(selectedInstance.id, file.url, file.filename);
         await loadInstalledMods(selectedInstance.id);
       } else if (type === "modpack") {
-        const created = await api.installRemoteModpack(file.url, project.title);
+        const created = await api.installRemoteModpack(
+          file.url,
+          project.title,
+          project.icon_url,
+          Array.isArray(project.gallery) && project.gallery.length > 0 ? project.gallery[0] : undefined,
+          project.project_id
+        );
         setInstances((prev) => [created, ...prev]);
         setSelectedInstanceId(created.id);
       } else if (type === "shader") {
@@ -1289,8 +1316,21 @@ export default function App() {
         } ${isSelected ? "ring-1 ring-accent/40" : ""}`}
       >
         {/* 1. Üst Banner — Gerçekçi & Zarif Minecraft Arka Planı (Karikatürize nesneler kaldırıldı) */}
-        <div className="relative w-full h-24 overflow-hidden select-none bg-gradient-to-br from-accent/10 via-surface-2 to-surface-2">
-          {/* Sade renk gecisi â€” dekoratif sahne ogeleri kaldirildi */}
+        <div className="relative w-full h-28 overflow-hidden select-none bg-surface-3">
+          {/* Modpack kapağı varsa onu, yoksa tema renkli yumuşak geçişi göster */}
+          <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-surface-2 to-surface-2" />
+          {inst.cover_url && (
+            <img
+              src={inst.cover_url}
+              alt=""
+              loading="lazy"
+              referrerPolicy="no-referrer"
+              className="absolute inset-0 w-full h-full object-cover"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+            />
+          )}
 
           {/* Karartma degrade */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#16181c] via-[#16181c]/35 to-transparent pointer-events-none" />
@@ -1326,11 +1366,21 @@ export default function App() {
           </div>
 
           {/* Sol Altta Çıkıntılı Tematik Rozet */}
-          <div
-            className="absolute -bottom-5 left-6 w-11 h-11 rounded-xl border border-line bg-surface-2 flex items-center justify-center z-20"
-            
-          >
-            <Box className="w-5 h-5 text-accent" />
+          <div className="absolute -bottom-5 left-6 w-11 h-11 rounded-xl border border-line bg-surface-2 overflow-hidden flex items-center justify-center z-20">
+            {inst.icon_url ? (
+              <img
+                src={inst.icon_url}
+                alt={inst.name}
+                loading="lazy"
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+            ) : (
+              <Box className="w-5 h-5 text-accent" />
+            )}
           </div>
         </div>
 
@@ -1773,7 +1823,7 @@ export default function App() {
               {/* DİĞER YÜKLÜ PROFİLLER (HIZLI GEÇİŞ PANELİ) */}
               {instances.length > 1 && (
                 <div className="space-y-3 pt-2">
-                  <h3 className="text-sm font-semibold text-ink uppercase tracking-wider flex items-center gap-2">
+                  <h3 className="eyebrow flex items-center gap-2">
                     Diğer Yüklü Profiller
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -1787,26 +1837,33 @@ export default function App() {
                             sfx.playClick();
                             setSelectedInstanceId(inst.id);
                           }}
-                          className="p-4 rounded-xl border border-line hover:border-accent/50 bg-surface/90 hover:bg-surface-2 cursor-pointer transition-all flex items-center justify-between"
+                          className="p-3 rounded-xl border border-line hover:border-accent/50 bg-surface/90 hover:bg-surface-2 cursor-pointer transition-colors flex items-center justify-between gap-3"
                         >
-                          <div className="flex items-center gap-2.5">
-                            <span className="text-xl">
-                              {inst.loader_type === "forge"
-                                ? "⚒️"
-                                : inst.loader_type === "fabric"
-                                ? "🪡"
-                                : inst.loader_type === "neoforge"
-                                ? "⚡"
-                                : ""}
-                            </span>
-                            <div>
-                              <p className="text-xs font-semibold text-ink">{inst.name}</p>
-                              <p className="text-[10px] text-ink-muted font-mono">
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <div className="w-9 h-9 rounded-lg overflow-hidden bg-surface-3 border border-line flex items-center justify-center shrink-0">
+                              {inst.icon_url ? (
+                                <img
+                                  src={inst.icon_url}
+                                  alt=""
+                                  loading="lazy"
+                                  referrerPolicy="no-referrer"
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    e.currentTarget.style.display = "none";
+                                  }}
+                                />
+                              ) : (
+                                <Box className="w-4 h-4 text-ink-dim" />
+                              )}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-xs font-semibold text-ink truncate">{inst.name}</p>
+                              <p className="text-[10px] text-ink-dim font-mono truncate">
                                 MC {inst.minecraft_version} · {inst.loader_type.toUpperCase()}
                               </p>
                             </div>
                           </div>
-                          <span className="text-[10px] font-bold text-accent bg-cyan-950/60 px-2 py-0.5 rounded-lg border border-line">
+                          <span className="chip chip-accent shrink-0">
                             Geçiş Yap
                           </span>
                         </div>

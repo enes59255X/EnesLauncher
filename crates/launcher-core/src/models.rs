@@ -54,6 +54,15 @@ pub struct InstanceSummary {
     pub jvm_arguments: Option<String>,
     pub created_at: String,
     pub last_played_at: Option<String>,
+    /// Kaynak projenin (modpack) ikonu. Elle oluşturulan profillerde boş.
+    #[serde(default)]
+    pub icon_url: Option<String>,
+    /// Kaynak projenin kapak görseli (galerinin ilk görseli). Profil kartında banner olur.
+    #[serde(default)]
+    pub cover_url: Option<String>,
+    /// Kaynak projenin sağlayıcı kimliği (ör. Modrinth project_id).
+    #[serde(default)]
+    pub project_id: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -63,5 +72,11 @@ pub struct CreateInstanceRequest {
     pub loader_type: LoaderType,
     pub loader_version: Option<String>,
     pub allocated_memory_mb: Option<u32>,
+    /// Modpack kurulumunda doldurulur; elle profil oluşturmada boş bırakılır.
+    #[serde(default)]
+    pub icon_url: Option<String>,
+    #[serde(default)]
+    pub cover_url: Option<String>,
+    #[serde(default)]
+    pub project_id: Option<String>,
 }
-

@@ -703,8 +703,24 @@ export const api = {
     versionCache.set(key, { timestamp: Date.now(), data: res });
     return res;
   },
-  installRemoteModpack: (downloadUrl: string, packName: string) =>
-    invokeTauri<InstanceSummary>("install_remote_modpack", { downloadUrl, packName }),
+  installRemoteModpack: (
+    downloadUrl: string,
+    packName: string,
+    iconUrl?: string,
+    coverUrl?: string,
+    projectId?: string,
+  ) =>
+    invokeTauri<InstanceSummary>("install_remote_modpack", {
+      downloadUrl,
+      packName,
+      iconUrl: iconUrl ?? null,
+      coverUrl: coverUrl ?? null,
+      projectId: projectId ?? null,
+    }),
+
+  /** Görseli olmayan mevcut profil için modpack kapağını tamamlar. */
+  backfillInstanceArt: (instanceId: string) =>
+    invokeTauri<InstanceSummary | null>("backfill_instance_art", { instanceId }),
 
   // Hesap Yönetimi (Çevrimdışı & Çevrimiçi)
   listAccounts: () => invokeTauri<AccountProfile[]>("list_accounts"),

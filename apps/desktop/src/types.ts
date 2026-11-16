@@ -10,6 +10,12 @@ export interface InstanceSummary {
   allocated_memory_mb: number;
   created_at: string;
   last_played_at?: string;
+  /** Kaynak modpack ikonu (elle oluşturulan profillerde boş). */
+  icon_url?: string;
+  /** Kaynak modpack kapak görseli — profil kartında banner olarak kullanılır. */
+  cover_url?: string;
+  /** Kaynak projenin sağlayıcı kimliği (ör. Modrinth project_id). */
+  project_id?: string;
 }
 
 export interface CreateInstanceRequest {
@@ -18,6 +24,9 @@ export interface CreateInstanceRequest {
   loader_type: LoaderType;
   loader_version?: string;
   allocated_memory_mb?: number;
+  icon_url?: string;
+  cover_url?: string;
+  project_id?: string;
 }
 
 export interface SystemStatus {
